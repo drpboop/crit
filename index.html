@@ -1,81 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>call notes</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>critter</title>
 
 <style>
-body{
+body {
   background:#000;
   color:#fff;
-  font-family:"Century Gothic", sans-serif;
-  margin:0;
+  font-family:"Century Gothic",sans-serif;
   padding:20px;
 }
 
-.container{
+.container {
   max-width:600px;
   margin:auto;
   background:#111;
-  padding:18px;
+  padding:20px;
   border-radius:10px;
 }
 
-h2{text-align:center;margin-bottom:15px;}
+h2 { text-align:center; }
 
-label{
+label {
   display:block;
-  margin:6px 0 3px;
-  text-transform: lowercase;
+  margin-top:10px;
 }
 
-input, textarea, select{
+input, select, textarea {
   width:100%;
+  padding:10px;
+  margin-top:5px;
+  border:none;
+  border-radius:6px;
   background:#222;
   color:#fff;
-  border:none;
-  padding:10px;
-  border-radius:6px;
 }
 
-textarea{
-  resize:none;
-  overflow:hidden;
-  min-height:60px;
-}
+textarea { min-height:70px; }
 
-.row{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  margin-bottom:15px;
-}
+.section { display:none; }
 
-.formSection{display:none;}
-
-.button-row{
-  display:flex;
-  justify-content:center;
-  gap:10px;
+.buttons {
+  text-align:center;
   margin-top:15px;
 }
 
-button{
+button {
+  padding:8px 14px;
+  margin:5px;
   background:#444;
   color:#fff;
   border:none;
-  padding:8px 14px;
-  border-radius:5px;
-  text-transform: lowercase;
-  cursor:pointer;
+  border-radius:6px;
 }
 
-.outputBox{
+.output {
   margin-top:15px;
-  background:#111;
-  padding:10px;
-  border-radius:8px;
 }
 </style>
 </head>
@@ -84,39 +64,39 @@ button{
 
 <div class="container">
 
-<h2>call type</h2>
+<h2>critter</h2>
 
-<div class="row">
-<label><input type="checkbox" onclick="selectType('crit')"> crit</label>
-<label><input type="checkbox" onclick="selectType('provider')"> provider</label>
-<label><input type="checkbox" onclick="selectType('xfer')"> xfer</label>
+<div class="buttons">
+<label><input type="checkbox" onclick="show('crit')"> crit</label>
+<label><input type="checkbox" onclick="show('provider')"> provider</label>
+<label><input type="checkbox" onclick="show('xfer')"> xfer</label>
 </div>
 
 <!-- CRIT -->
-<div id="crit" class="formSection">
-<label>agent name:</label>
+<div id="crit" class="section">
+
+<label>agent name</label>
 <input id="c_name">
 
-<label>agent id:</label>
+<label>agent id</label>
 <input id="c_id">
 
-<label>rx:</label>
+<label>rx</label>
 <input id="c_rx">
 
-<label>resolution:</label>
-
-<select onchange="addCritRes(this.value)">
-<option value="">-- quick select --</option>
+<label>resolution quick select</label>
+<select onchange="addCrit(this.value)">
+<option value="">-- select --</option>
 
 <option value="updated pa detailing on file to reflect dating approved by rph">pa dating</option>
 <option value="updated pa detailing on file to reflect strength approved by rph">pa strength</option>
 <option value="updated pa detailing on file to reflect drug approved by rph">pa drug</option>
 <option value="updated pa on file to reflect quantity approved by rph">quantity update</option>
 
-<option value="updated from pens to syringes per member request">pens → syringes (mbr)</option>
-<option value="updated from pens to syringes per doctor's request">pens → syringes (dr)</option>
-<option value="updated from syringes to pens per member request">syringes → pens (mbr)</option>
-<option value="updated from syringes to pens per doctor's request">syringes → pens (dr)</option>
+<option value="updated from pens to syringes per member request">pens → syringes mbr</option>
+<option value="updated from pens to syringes per doctor's request">pens → syringes dr</option>
+<option value="updated from syringes to pens per member request">syringes → pens mbr</option>
+<option value="updated from syringes to pens per doctor's request">syringes → pens dr</option>
 
 <option value="updated from multidose bottle to single-use vials per mdo request">multidose → vials</option>
 
@@ -130,7 +110,7 @@ button{
 
 <option value="backdated to mm/dd/yyyy per mdo request">backdated</option>
 
-<option value="added pa as it was not added when case was approved">missing pa added</option>
+<option value="added pa as it was not added when case was approved">missing pa</option>
 
 <option value="updated rx restrictions and claims paid">rx restrictions</option>
 
@@ -141,164 +121,147 @@ button{
 
 </select>
 
-<textarea id="c_res" oninput="autoExpand(this)"></textarea>
+<label>resolution</label>
+<textarea id="c_res"></textarea>
+
 </div>
 
 <!-- PROVIDER -->
-<div id="provider" class="formSection">
-<label>name:</label>
+<div id="provider" class="section">
+
+<label>name</label>
 <input id="p_name">
 
-<label>job title:</label>
+<label>job title</label>
 <input id="p_title">
 
-<label>npi:</label>
+<label>npi</label>
 <input id="p_npi">
 
-<label>cb#:</label>
+<label>cb#</label>
 <input id="p_cb">
 
-<label>fax#:</label>
+<label>fax#</label>
 <input id="p_fax">
 
-<label>rx:</label>
-<input id="p_rx">
+<label>rx</label>
+<input id="p_rx" oninput="updateProvider()">
 
-<label>resolution:</label>
-
-<select onchange="fillProviderRes(this.value)">
-<option value="">-- quick select --</option>
-<option value="verbal pa">verbal pa request</option>
+<label>resolution quick select</label>
+<select onchange="providerPick(this.value)">
+<option value="">-- select --</option>
+<option value="verbal">verbal pa request</option>
 </select>
 
-<textarea id="p_res" oninput="autoExpand(this)"></textarea>
+<label>resolution</label>
+<textarea id="p_res"></textarea>
+
 </div>
 
 <!-- XFER -->
-<div id="xfer" class="formSection">
-<label>caller name:</label>
+<div id="xfer" class="section">
+
+<label>caller name</label>
 <input id="x_name">
 
-<label>facility / npi:</label>
+<label>facility / npi</label>
 <input id="x_fac">
 
-<label>rx:</label>
+<label>rx</label>
 <input id="x_rx">
 
-<label>xferred to:</label>
+<label>xferred to</label>
 <input id="x_to">
 
-<label>resolution:</label>
-
-<select onchange="fillXferRes(this.value)">
-<option value="">-- quick select --</option>
-<option value="standard">standard xfer script</option>
+<label>reason</label>
+<select id="x_reason">
+<option value="">-- select --</option>
+<option value="pa">pa</option>
+<option value="appeal">appeal</option>
+<option value="request p2p">request p2p</option>
+<option value="go over denial">go over denial</option>
 </select>
 
-<textarea id="x_res" oninput="autoExpand(this)"></textarea>
 </div>
 
-<div class="button-row">
+<div class="buttons">
 <button onclick="generate()">generate</button>
 <button onclick="clearOutput()">clear output</button>
 <button onclick="resetForm()">reset form</button>
 </div>
 
-<div id="output"></div>
+<div id="output" class="output"></div>
 
 </div>
 
 <script>
 
-function autoExpand(el){
-  el.style.height="auto";
-  el.style.height=el.scrollHeight+"px";
-}
+let active="";
 
-let activeType="";
-
-function selectType(type){
-  activeType=type;
-  document.querySelectorAll('.formSection').forEach(f=>f.style.display='none');
-  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
-
-  document.getElementById(type).style.display='block';
-
-  if(type==="crit") document.querySelectorAll('input[type=checkbox]')[0].checked=true;
-  if(type==="provider") document.querySelectorAll('input[type=checkbox]')[1].checked=true;
-  if(type==="xfer") document.querySelectorAll('input[type=checkbox]')[2].checked=true;
+function show(type){
+  active=type;
+  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+  document.getElementById(type).style.display="block";
 }
 
 /* CRIT STACK */
-function addCritRes(val){
+function addCrit(val){
   if(!val) return;
-  const box=document.getElementById("c_res");
-  box.value = box.value ? box.value + " // " + val : val;
-  autoExpand(box);
+  c_res.value = c_res.value ? c_res.value+" // "+val : val;
 }
 
-/* ✅ PROVIDER RX-INJECT */
-function fillProviderRes(val){
-  if(val==="verbal pa"){
-    p_res.value = `called to request a verbal pa for ${p_rx.value}. pega intake # `;
-    autoExpand(p_res);
-  }
+/* PROVIDER */
+function providerPick(val){
+ if(val==="verbal"){
+   p_res.value=`called to request a verbal pa for ${p_rx.value} // pega intake #`;
+ }
 }
 
-/* XFER */
-function fillXferRes(val){
-  if(val==="standard"){
-    x_res.value = `called to check status on pa/appeal/request p2p/go over denial. advised this is the pa intake line and i would connect them with my colleague with provider/member services. warm / cold transferred caller to cc. agent xxxxx assisted caller.`;
-    autoExpand(x_res);
-  }
+function updateProvider(){
+ if(p_res.value.includes("verbal pa")){
+   p_res.value=`called to request a verbal pa for ${p_rx.value} // pega intake #`;
+ }
 }
 
+/* XFER BUILD */
+function buildXfer(){
+  return `called to check status on ${x_reason.value} // advised pa intake line and connected them w/colleague // xferred to ${x_to.value}`;
+}
+
+/* GENERATE */
 function generate(){
-  let text="";
+ let text="";
 
-  if(activeType==="crit"){
-    text = `${c_name.value} // ${c_id.value} // ${c_rx.value} // ${c_res.value} // drp crit prime therapeutics 866.202.3474`;
-  }
+ if(active==="crit"){
+  text=`${c_name.value} // ${c_id.value} // ${c_rx.value} // ${c_res.value} // drp crit prime 866.202.3474`;
+ }
 
-  if(activeType==="provider"){
-    text = `${p_name.value} // ${p_title.value} // npi#${p_npi.value} // cb#${p_cb.value} // fax#${p_fax.value} // ${p_rx.value} // ${p_res.value} // drp crit prime therapeutics 866.202.3474`;
-  }
+ if(active==="provider"){
+  text=`${p_name.value} // ${p_title.value} // npi#${p_npi.value} // cb#${p_cb.value} // fax#${p_fax.value} // ${p_rx.value} // ${p_res.value} // drp crit prime 866.202.3474`;
+ }
 
-  if(activeType==="xfer"){
-    text = `${x_name.value} // ${x_fac.value} // ${x_rx.value} // xferred to ${x_to.value} // ${x_res.value} // drp crit prime therapeutics 866.202.3474`;
-  }
+ if(active==="xfer"){
+  text=`${x_name.value} // ${x_fac.value} // ${x_rx.value} // ${buildXfer()} // drp crit prime 866.202.3474`;
+ }
 
-  document.getElementById("output").innerHTML = `
-    <div class="outputBox">
-      <textarea readonly onclick="this.select()">${text}</textarea>
-      <div class="button-row">
-        <button onclick="copyText(this)">copy</button>
-      </div>
-    </div>
-  `;
+ output.innerHTML = `
+ <textarea onclick="this.select()">${text}</textarea>
+ <div class="buttons"><button onclick="copy()">copy</button></div>`;
 }
 
-function copyText(btn){
-  const t=btn.closest('.outputBox').querySelector('textarea');
-  t.select();
-  document.execCommand("copy");
+function copy(){
+ let t=document.querySelector("#output textarea");
+ t.select();
+ document.execCommand("copy");
 }
 
-function clearOutput(){
-  document.getElementById("output").innerHTML="";
-}
+function clearOutput(){ output.innerHTML=""; }
 
 function resetForm(){
-  document.querySelectorAll("input,textarea").forEach(el=>{
-    el.value="";
-    el.style.height="auto";
-  });
-
-  document.querySelectorAll('.formSection').forEach(f=>f.style.display='none');
-  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
-
-  clearOutput();
-  activeType="";
+ document.querySelectorAll("input,textarea").forEach(e=>e.value="");
+ document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+ clearOutput();
+ active="";
 }
 
 </script>
