@@ -4,29 +4,38 @@
 <title>critter</title>
 
 <style>
-body {
+body{
   background:#000;
   color:#fff;
   font-family:"Century Gothic",sans-serif;
   padding:20px;
 }
 
-.container {
+.container{
   max-width:600px;
   margin:auto;
   background:#111;
   padding:20px;
   border-radius:10px;
+  box-sizing:border-box;
 }
 
-h2 { text-align:center; }
-
-label {
-  display:block;
-  margin-top:10px;
+/* ✅ horizontal checkbox row */
+.topRow{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-bottom:15px;
 }
 
-input, select, textarea {
+.topRow label{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+/* ✅ fix inputs overflowing */
+input, select, textarea{
   width:100%;
   padding:10px;
   margin-top:5px;
@@ -34,18 +43,26 @@ input, select, textarea {
   border-radius:6px;
   background:#222;
   color:#fff;
+  box-sizing:border-box;
 }
 
-textarea { min-height:70px; }
+textarea{
+  min-height:70px;
+}
 
-.section { display:none; }
+label{
+  display:block;
+  margin-top:10px;
+}
 
-.buttons {
+.section{display:none;}
+
+.buttons{
   text-align:center;
   margin-top:15px;
 }
 
-button {
+button{
   padding:8px 14px;
   margin:5px;
   background:#444;
@@ -54,7 +71,7 @@ button {
   border-radius:6px;
 }
 
-.output {
+.output{
   margin-top:15px;
 }
 </style>
@@ -64,12 +81,13 @@ button {
 
 <div class="container">
 
-<h2>critter</h2>
+<h2 style="text-align:center;">critter</h2>
 
-<div class="buttons">
-<label><input type="checkbox" onclick="show('crit')"> crit</label>
-<label><input type="checkbox" onclick="show('provider')"> provider</label>
-<label><input type="checkbox" onclick="show('xfer')"> xfer</label>
+<!-- ✅ FIXED CHECKBOX ROW -->
+<div class="topRow">
+<label><input type="checkbox" onclick="showForm('crit',this)"> crit</label>
+<label><input type="checkbox" onclick="showForm('provider',this)"> provider</label>
+<label><input type="checkbox" onclick="showForm('xfer',this)"> xfer</label>
 </div>
 
 <!-- CRIT -->
@@ -198,16 +216,21 @@ button {
 
 let active="";
 
-function show(type){
+/* ✅ FIX checkbox behavior */
+function showForm(type, el){
   active=type;
+
   document.querySelectorAll(".section").forEach(s=>s.style.display="none");
   document.getElementById(type).style.display="block";
+
+  document.querySelectorAll(".topRow input").forEach(c=>c.checked=false);
+  el.checked=true;
 }
 
 /* CRIT STACK */
 function addCrit(val){
-  if(!val) return;
-  c_res.value = c_res.value ? c_res.value+" // "+val : val;
+ if(!val) return;
+ c_res.value=c_res.value ? c_res.value+" // "+val : val;
 }
 
 /* PROVIDER */
@@ -223,9 +246,9 @@ function updateProvider(){
  }
 }
 
-/* XFER BUILD */
+/* XFER */
 function buildXfer(){
-  return `called to check status on ${x_reason.value} // advised pa intake line and connected them w/colleague // xferred to ${x_to.value}`;
+ return `called to check status on ${x_reason.value} // advised pa intake line and connected them w/colleague // xferred to ${x_to.value}`;
 }
 
 /* GENERATE */
@@ -244,8 +267,7 @@ function generate(){
   text=`${x_name.value} // ${x_fac.value} // ${x_rx.value} // ${buildXfer()} // drp crit prime 866.202.3474`;
  }
 
- output.innerHTML = `
- <textarea onclick="this.select()">${text}</textarea>
+ output.innerHTML=`<textarea onclick="this.select()">${text}</textarea>
  <div class="buttons"><button onclick="copy()">copy</button></div>`;
 }
 
@@ -260,6 +282,7 @@ function clearOutput(){ output.innerHTML=""; }
 function resetForm(){
  document.querySelectorAll("input,textarea").forEach(e=>e.value="");
  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+ document.querySelectorAll(".topRow input").forEach(c=>c.checked=false);
  clearOutput();
  active="";
 }
