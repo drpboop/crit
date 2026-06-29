@@ -188,15 +188,17 @@ function generate(){
   let text="";
 
   if(activeType==="crit"){
-    text = `${c_name.value} // ${c_id.value} // ${c_rx.value} // ${c_res.value} // drp crit prime therapeutics 866.202.3474`;
+    text = `${c_name.value} // ${c_id.value} // ${c_rx.value} // ${c_res.value} // drp crit prime 866.202.3474`;
   }
 
+  
   if(activeType==="provider"){
-    text = `${p_name.value} // ${p_title.value} // ${p_npi.value} // ${p_cb.value} // ${p_fax.value} // ${p_rx.value} // ${p_res.value} // drp crit prime therapeutics 866.202.3474`;
+    text = `${p_name.value} // ${p_title.value} // npi#${p_npi.value} // cb#${p_cb.value} // fax#${p_fax.value} // ${p_rx.value} // ${p_res.value} // drp crit prime 866.202.3474`;
   }
 
+  
   if(activeType==="xfer"){
-    text = `${x_name.value} // ${x_fac.value} // ${x_rx.value} // xferred to ${x_to.value} // drp crit prime therapeutics 866.202.3474`;
+    text = `${x_name.value} // ${x_fac.value} // ${x_rx.value} // xferred to ${x_to.value} // drp crit prime 866.202.3474`;
   }
 
   document.getElementById("output").innerHTML = `
