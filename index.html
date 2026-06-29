@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>critter</title>
+<title>call notes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -22,10 +22,7 @@ body{
   border-radius:10px;
 }
 
-h2{
-  text-align:center;
-  margin-bottom:15px;
-}
+h2{text-align:center;margin-bottom:15px;}
 
 label{
   display:block;
@@ -40,7 +37,6 @@ input, textarea, select{
   border:none;
   padding:10px;
   border-radius:6px;
-  box-sizing:border-box;
 }
 
 textarea{
@@ -51,14 +47,12 @@ textarea{
 
 .row{
   display:flex;
-  gap:15px;
   justify-content:center;
+  gap:15px;
   margin-bottom:15px;
 }
 
-.formSection{
-  display:none;
-}
+.formSection{display:none;}
 
 .button-row{
   display:flex;
@@ -73,8 +67,8 @@ button{
   border:none;
   padding:8px 14px;
   border-radius:5px;
-  cursor:pointer;
   text-transform: lowercase;
+  cursor:pointer;
 }
 
 .outputBox{
@@ -114,15 +108,36 @@ button{
 <select onchange="addCritRes(this.value)">
 <option value="">-- quick select --</option>
 
-<option value="updated pa detailing on file to reflect drug approved by rph">pa drug update</option>
-<option value="updated pa detailing on file to reflect strength approved by rph">pa strength update</option>
-<option value="updated pa detailing on file to reflect dating approved by rph">pa dating update</option>
+<option value="updated pa detailing on file to reflect dating approved by rph">pa dating</option>
+<option value="updated pa detailing on file to reflect strength approved by rph">pa strength</option>
+<option value="updated pa detailing on file to reflect drug approved by rph">pa drug</option>
+<option value="updated pa on file to reflect quantity approved by rph">quantity update</option>
+
+<option value="updated from pens to syringes per member request">pens → syringes (mbr)</option>
+<option value="updated from pens to syringes per doctor's request">pens → syringes (dr)</option>
+<option value="updated from syringes to pens per member request">syringes → pens (mbr)</option>
+<option value="updated from syringes to pens per doctor's request">syringes → pens (dr)</option>
+
+<option value="updated from multidose bottle to single-use vials per mdo request">multidose → vials</option>
+
+<option value="updated pa detailing on file for high dollar on approved medication">high dollar</option>
+
+<option value="transferred from previous account same type of plan and um review">same plan transfer</option>
 
 <option value="pa cannot be transferred // new pa required">pa not transferable</option>
-<option value="advised clinical review cannot assist // referred to ssa">ssa redirect</option>
+
+<option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">extended loading</option>
+
+<option value="backdated to mm/dd/yyyy per mdo request">backdated</option>
+
+<option value="added pa as it was not added when case was approved">missing pa added</option>
+
+<option value="updated rx restrictions and claims paid">rx restrictions</option>
 
 <option value="called to go over denial // reviewed next steps">denial call</option>
-<option value="called to go over approval // provided approval info">approval call</option>
+<option value="called to go over approval // provided approval information">approval call</option>
+
+<option value="advised clinical review cannot assist // referred to ssa">ssa redirect</option>
 
 </select>
 
@@ -153,9 +168,7 @@ button{
 
 <select onchange="fillProviderRes(this.value)">
 <option value="">-- quick select --</option>
-
-<option value="called to request a verbal pa for xxxxx. pega intake # xxxxx (copy and paste in#)">verbal pa request</option>
-
+<option value="verbal pa">verbal pa request</option>
 </select>
 
 <textarea id="p_res" oninput="autoExpand(this)"></textarea>
@@ -179,9 +192,7 @@ button{
 
 <select onchange="fillXferRes(this.value)">
 <option value="">-- quick select --</option>
-
-<option value="called to check status on pa/appeal/request p2p/go over denial. advised this is the pa intake line and i would connect them with my colleague with provider/member services. warm / cold transferred caller to cc. agent xxxxx assisted caller.">standard xfer script</option>
-
+<option value="standard">standard xfer script</option>
 </select>
 
 <textarea id="x_res" oninput="autoExpand(this)"></textarea>
@@ -218,33 +229,26 @@ function selectType(type){
   if(type==="xfer") document.querySelectorAll('input[type=checkbox]')[2].checked=true;
 }
 
-/* ✅ CRIT STACKING */
+/* CRIT STACK */
 function addCritRes(val){
   if(!val) return;
-
   const box=document.getElementById("c_res");
-
-  if(box.value.trim() !== ""){
-    box.value += " // " + val;
-  } else {
-    box.value = val;
-  }
-
+  box.value = box.value ? box.value + " // " + val : val;
   autoExpand(box);
 }
 
-/* provider */
+/* ✅ PROVIDER RX-INJECT */
 function fillProviderRes(val){
-  if(val){
-    p_res.value = val;
+  if(val==="verbal pa"){
+    p_res.value = `called to request a verbal pa for ${p_rx.value}. pega intake # `;
     autoExpand(p_res);
   }
 }
 
-/* xfer */
+/* XFER */
 function fillXferRes(val){
-  if(val){
-    x_res.value = val;
+  if(val==="standard"){
+    x_res.value = `called to check status on pa/appeal/request p2p/go over denial. advised this is the pa intake line and i would connect them with my colleague with provider/member services. warm / cold transferred caller to cc. agent xxxxx assisted caller.`;
     autoExpand(x_res);
   }
 }
