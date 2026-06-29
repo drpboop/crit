@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>critter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  background:#000;
+  color:#fff;
+  font-family:"Century Gothic", sans-serif;
+  margin:0;
+  padding:20px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+  background:#111;
+  padding:18px;
+  border-radius:10px;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  margin:6px 0 3px;
+  text-transform: lowercase;
+}
+
+input, textarea{
+  width:100%;
+  background:#222;
+  color:#fff;
+  border:none;
+  padding:10px;
+  border-radius:6px;
+  box-sizing:border-box;
+}
+
+textarea{
+  resize:none;
+  overflow:hidden;
+  min-height:60px;
+}
+
+.row{
+  display:flex;
+  gap:15px;
+  justify-content:center;
+  margin-bottom:15px;
+}
+
+.formSection{
+  display:none;
+}
+
+.button-row{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:15px;
+}
+
+button{
+  background:#444;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:5px;
+  cursor:pointer;
+  text-transform: lowercase;
+}
+
+.outputBox{
+  margin-top:15px;
+  background:#111;
+  padding:10px;
+  border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>call type</h2>
+
+<div class="row">
+<label><input type="checkbox" onclick="selectType('crit')"> crit</label>
+<label><input type="checkbox" onclick="selectType('provider')"> provider</label>
+<label><input type="checkbox" onclick="selectType('xfer')"> xfer</label>
+</div>
+
+<!-- crit -->
+<div id="crit" class="formSection">
+<label>agent name:</label>
+<input id="c_name">
+
+<label>agent id:</label>
+<input id="c_id">
+
+<label>rx:</label>
+<input id="c_rx">
+
+<label>resolution:</label>
+<textarea id="c_res" oninput="autoExpand(this)"></textarea>
+</div>
+
+<!-- provider -->
+<div id="provider" class="formSection">
+<label>name:</label>
+<input id="p_name">
+
+<label>job title:</label>
+<input id="p_title">
+
+<label>npi:</label>
+<input id="p_npi">
+
+<label>cb#:</label>
+<input id="p_cb">
+
+<label>fax#:</label>
+<input id="p_fax">
+
+<label>rx:</label>
+<input id="p_rx">
+
+<label>resolution:</label>
+<textarea id="p_res" oninput="autoExpand(this)"></textarea>
+</div>
+
+<!-- xfer -->
+<div id="xfer" class="formSection">
+<label>caller name:</label>
+<input id="x_name">
+
+<label>facility / npi:</label>
+<input id="x_fac">
+
+<label>rx:</label>
+<input id="x_rx">
+
+<label>xferred to:</label>
+<input id="x_to">
+</div>
+
+<div class="button-row">
+<button onclick="generate()">generate</button>
+<button onclick="clearOutput()">clear output</button>
+<button onclick="resetForm()">reset form</button>
+</div>
+
+<div id="output"></div>
+
+</div>
+
+<script>
+
+function autoExpand(el){
+  el.style.height="auto";
+  el.style.height=el.scrollHeight+"px";
+}
+
+let activeType="";
+
+function selectType(type){
+  activeType=type;
+
+  document.querySelectorAll('.formSection').forEach(f=>f.style.display='none');
+  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
+
+  document.getElementById(type).style.display='block';
+
+  if(type==="crit") document.querySelectorAll('input[type=checkbox]')[0].checked=true;
+  if(type==="provider") document.querySelectorAll('input[type=checkbox]')[1].checked=true;
+  if(type==="xfer") document.querySelectorAll('input[type=checkbox]')[2].checked=true;
+}
+
+function generate(){
+  let text="";
+
+  if(activeType==="crit"){
+    text = `${c_name.value} // ${c_id.value} // ${c_rx.value} // ${c_res.value} // drp crit prime therapeutics 866.202.3474`;
+  }
+
+  if(activeType==="provider"){
+    text = `${p_name.value} // ${p_title.value} // ${p_npi.value} // ${p_cb.value} // ${p_fax.value} // ${p_rx.value} // ${p_res.value} // drp crit prime therapeutics 866.202.3474`;
+  }
+
+  if(activeType==="xfer"){
+    text = `${x_name.value} // ${x_fac.value} // ${x_rx.value} // xferred to ${x_to.value} // drp crit prime therapeutics 866.202.3474`;
+  }
+
+  document.getElementById("output").innerHTML = `
+    <div class="outputBox">
+      <textarea readonly onclick="this.select()">${text}</textarea>
+      <div class="button-row">
+        <button onclick="copyText(this)">copy</button>
+      </div>
+    </div>
+  `;
+}
+
+function copyText(btn){
+  const t=btn.closest('.outputBox').querySelector('textarea');
+  t.select();
+  document.execCommand("copy");
+}
+
+function clearOutput(){
+  document.getElementById("output").innerHTML="";
+}
+
+function resetForm(){
+  document.querySelectorAll("input,textarea").forEach(el=>{
+    el.value="";
+    el.style.height="auto";
+  });
+
+  document.querySelectorAll('.formSection').forEach(f=>f.style.display='none');
+  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
+
+  clearOutput();
+  activeType="";
+}
+
+</script>
+
+</body>
+</html>
