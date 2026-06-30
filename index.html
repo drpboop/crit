@@ -336,7 +336,7 @@ function buildXfer(){
   const reason=document.getElementById("x_reason").value;
   const transferredTo=document.getElementById("x_to").value;
 
-  return `called to check status on ${reason} // advised pa intake line and connected them w/colleague // xferred to ${transferredTo}`;
+  return `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
 }
 
 /* GENERATE */
@@ -358,10 +358,6 @@ function generate(){
     const rx=document.getElementById("p_rx").value;
     const resolution=document.getElementById("p_res").value;
 
-    /*
-      NPI, callback number, fax number, and mbr id / pa#
-      are intentionally excluded from the output.
-    */
     text=`${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
   }
 
