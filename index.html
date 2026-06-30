@@ -20,7 +20,6 @@ body{
   box-sizing:border-box;
 }
 
-/* ✅ horizontal checkbox row */
 .topRow{
   display:flex;
   justify-content:center;
@@ -34,7 +33,6 @@ body{
   gap:5px;
 }
 
-/* ✅ fix inputs overflowing */
 input, select, textarea{
   width:100%;
   padding:10px;
@@ -55,7 +53,9 @@ label{
   margin-top:10px;
 }
 
-.section{display:none;}
+.section{
+  display:none;
+}
 
 .buttons{
   text-align:center;
@@ -69,6 +69,11 @@ button{
   color:#fff;
   border:none;
   border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#555;
 }
 
 .output{
@@ -83,11 +88,21 @@ button{
 
 <h2 style="text-align:center;">critter</h2>
 
-<!-- ✅ FIXED CHECKBOX ROW -->
 <div class="topRow">
-<label><input type="checkbox" onclick="showForm('crit',this)"> crit</label>
-<label><input type="checkbox" onclick="showForm('provider',this)"> provider</label>
-<label><input type="checkbox" onclick="showForm('xfer',this)"> xfer</label>
+  <label>
+    <input type="checkbox" onclick="showForm('crit',this)">
+    crit
+  </label>
+
+  <label>
+    <input type="checkbox" onclick="showForm('provider',this)">
+    provider
+  </label>
+
+  <label>
+    <input type="checkbox" onclick="showForm('xfer',this)">
+    xfer
+  </label>
 </div>
 
 <!-- CRIT -->
@@ -99,44 +114,91 @@ button{
 <label>agent id</label>
 <input id="c_id">
 
+<label>mbr id / pa#</label>
+<input id="c_mbr_pa">
+
 <label>rx</label>
 <input id="c_rx">
 
 <label>resolution quick select</label>
-<select onchange="addCrit(this.value)">
-<option value="">-- select --</option>
+<select onchange="addCrit(this.value); this.selectedIndex=0;">
+  <option value="">-- select --</option>
 
-<option value="updated pa detailing on file to reflect dating approved by rph">pa dating</option>
-<option value="updated pa detailing on file to reflect strength approved by rph">pa strength</option>
-<option value="updated pa detailing on file to reflect drug approved by rph">pa drug</option>
-<option value="updated pa on file to reflect quantity approved by rph">quantity update</option>
+  <option value="updated pa detailing on file to reflect dating approved by rph">
+    pa dating
+  </option>
 
-<option value="updated from pens to syringes per member request">pens → syringes mbr</option>
-<option value="updated from pens to syringes per doctor's request">pens → syringes dr</option>
-<option value="updated from syringes to pens per member request">syringes → pens mbr</option>
-<option value="updated from syringes to pens per doctor's request">syringes → pens dr</option>
+  <option value="updated pa detailing on file to reflect strength approved by rph">
+    pa strength
+  </option>
 
-<option value="updated from multidose bottle to single-use vials per mdo request">multidose → vials</option>
+  <option value="updated pa detailing on file to reflect drug approved by rph">
+    pa drug
+  </option>
 
-<option value="updated pa detailing on file for high dollar on approved medication">high dollar</option>
+  <option value="updated pa on file to reflect quantity approved by rph">
+    quantity update
+  </option>
 
-<option value="transferred from previous account same type of plan and um review">same plan transfer</option>
+  <option value="updated from pens to syringes per member request">
+    pens → syringes mbr
+  </option>
 
-<option value="pa cannot be transferred // new pa required">pa not transferable</option>
+  <option value="updated from pens to syringes per doctor's request">
+    pens → syringes dr
+  </option>
 
-<option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">extended loading</option>
+  <option value="updated from syringes to pens per member request">
+    syringes → pens mbr
+  </option>
 
-<option value="backdated to mm/dd/yyyy per mdo request">backdated</option>
+  <option value="updated from syringes to pens per doctor's request">
+    syringes → pens dr
+  </option>
 
-<option value="added pa as it was not added when case was approved">missing pa</option>
+  <option value="updated from multidose bottle to single-use vials per mdo request">
+    multidose → vials
+  </option>
 
-<option value="updated rx restrictions and claims paid">rx restrictions</option>
+  <option value="updated pa detailing on file for high dollar on approved medication">
+    high dollar
+  </option>
 
-<option value="called to go over denial // reviewed next steps">denial call</option>
-<option value="called to go over approval // provided approval information">approval call</option>
+  <option value="transferred from previous account same type of plan and um review">
+    same plan transfer
+  </option>
 
-<option value="advised clinical review cannot assist // referred to ssa">ssa redirect</option>
+  <option value="pa cannot be transferred // new pa required">
+    pa not transferable
+  </option>
 
+  <option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">
+    extended loading
+  </option>
+
+  <option value="backdated to mm/dd/yyyy per mdo request">
+    backdated
+  </option>
+
+  <option value="added pa as it was not added when case was approved">
+    missing pa
+  </option>
+
+  <option value="updated rx restrictions and claims paid">
+    rx restrictions
+  </option>
+
+  <option value="called to go over denial // reviewed next steps">
+    denial call
+  </option>
+
+  <option value="called to go over approval // provided approval information">
+    approval call
+  </option>
+
+  <option value="advised clinical review cannot assist // referred to ssa">
+    ssa redirect
+  </option>
 </select>
 
 <label>resolution</label>
@@ -162,13 +224,16 @@ button{
 <label>fax#</label>
 <input id="p_fax">
 
+<label>mbr id / pa#</label>
+<input id="p_mbr_pa">
+
 <label>rx</label>
 <input id="p_rx" oninput="updateProvider()">
 
 <label>resolution quick select</label>
-<select onchange="providerPick(this.value)">
-<option value="">-- select --</option>
-<option value="verbal">verbal pa request</option>
+<select onchange="providerPick(this.value); this.selectedIndex=0;">
+  <option value="">-- select --</option>
+  <option value="verbal">verbal pa request</option>
 </select>
 
 <label>resolution</label>
@@ -185,6 +250,9 @@ button{
 <label>facility / npi</label>
 <input id="x_fac">
 
+<label>mbr id / pa#</label>
+<input id="x_mbr_pa">
+
 <label>rx</label>
 <input id="x_rx">
 
@@ -193,19 +261,19 @@ button{
 
 <label>reason</label>
 <select id="x_reason">
-<option value="">-- select --</option>
-<option value="pa">pa</option>
-<option value="appeal">appeal</option>
-<option value="request p2p">request p2p</option>
-<option value="go over denial">go over denial</option>
+  <option value="">-- select --</option>
+  <option value="pa">pa</option>
+  <option value="appeal">appeal</option>
+  <option value="request p2p">request p2p</option>
+  <option value="go over denial">go over denial</option>
 </select>
 
 </div>
 
 <div class="buttons">
-<button onclick="generate()">generate</button>
-<button onclick="clearOutput()">clear output</button>
-<button onclick="resetForm()">reset form</button>
+  <button onclick="generate()">generate</button>
+  <button onclick="clearOutput()">clear output</button>
+  <button onclick="resetForm()">reset form</button>
 </div>
 
 <div id="output" class="output"></div>
@@ -216,75 +284,148 @@ button{
 
 let active="";
 
-/* ✅ FIX checkbox behavior */
 function showForm(type, el){
   active=type;
 
-  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+  document.querySelectorAll(".section").forEach(section=>{
+    section.style.display="none";
+  });
+
   document.getElementById(type).style.display="block";
 
-  document.querySelectorAll(".topRow input").forEach(c=>c.checked=false);
+  document.querySelectorAll(".topRow input").forEach(checkbox=>{
+    checkbox.checked=false;
+  });
+
   el.checked=true;
 }
 
-/* CRIT STACK */
-function addCrit(val){
- if(!val) return;
- c_res.value=c_res.value ? c_res.value+" // "+val : val;
+/* CRIT */
+function addCrit(value){
+  if(!value) return;
+
+  const resolution=document.getElementById("c_res");
+
+  resolution.value=resolution.value
+    ? resolution.value+" // "+value
+    : value;
 }
 
 /* PROVIDER */
-function providerPick(val){
- if(val==="verbal"){
-   p_res.value=`called to request a verbal pa for ${p_rx.value} // pega intake #`;
- }
+function providerPick(value){
+  if(value==="verbal"){
+    const rx=document.getElementById("p_rx").value;
+
+    document.getElementById("p_res").value=
+      `called to request a verbal pa for ${rx} // pega intake #`;
+  }
 }
 
 function updateProvider(){
- if(p_res.value.includes("verbal pa")){
-   p_res.value=`called to request a verbal pa for ${p_rx.value} // pega intake #`;
- }
+  const resolution=document.getElementById("p_res");
+  const rx=document.getElementById("p_rx").value;
+
+  if(resolution.value.includes("verbal pa")){
+    resolution.value=
+      `called to request a verbal pa for ${rx} // pega intake #`;
+  }
 }
 
 /* XFER */
 function buildXfer(){
- return `called to check status on ${x_reason.value} // advised pa intake line and connected them w/colleague // xferred to ${x_to.value}`;
+  const reason=document.getElementById("x_reason").value;
+  const transferredTo=document.getElementById("x_to").value;
+
+  return `called to check status on ${reason} // advised pa intake line and connected them w/colleague // xferred to ${transferredTo}`;
 }
 
 /* GENERATE */
 function generate(){
- let text="";
+  let text="";
 
- if(active==="crit"){
-  text=`${c_name.value} // ${c_id.value} // ${c_rx.value} // ${c_res.value} // drp crit prime 866.202.3474`;
- }
+  if(active==="crit"){
+    const name=document.getElementById("c_name").value;
+    const id=document.getElementById("c_id").value;
+    const rx=document.getElementById("c_rx").value;
+    const resolution=document.getElementById("c_res").value;
 
- if(active==="provider"){
-  text=`${p_name.value} // ${p_title.value} // npi#${p_npi.value} // cb#${p_cb.value} // fax#${p_fax.value} // ${p_rx.value} // ${p_res.value} // drp crit prime 866.202.3474`;
- }
+    text=`${name} // ${id} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+  }
 
- if(active==="xfer"){
-  text=`${x_name.value} // ${x_fac.value} // ${x_rx.value} // ${buildXfer()} // drp crit prime 866.202.3474`;
- }
+  if(active==="provider"){
+    const name=document.getElementById("p_name").value;
+    const title=document.getElementById("p_title").value;
+    const rx=document.getElementById("p_rx").value;
+    const resolution=document.getElementById("p_res").value;
 
- output.innerHTML=`<textarea onclick="this.select()">${text}</textarea>
- <div class="buttons"><button onclick="copy()">copy</button></div>`;
+    /*
+      NPI, callback number, fax number, and mbr id / pa#
+      are intentionally excluded from the output.
+    */
+    text=`${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+  }
+
+  if(active==="xfer"){
+    const name=document.getElementById("x_name").value;
+    const facility=document.getElementById("x_fac").value;
+    const rx=document.getElementById("x_rx").value;
+
+    text=`${name} // ${facility} // ${rx} // ${buildXfer()} // drp crit prime 866.202.3474`;
+  }
+
+  if(!active){
+    document.getElementById("output").innerHTML=
+      "<p style='text-align:center;'>please select a form first.</p>";
+    return;
+  }
+
+  document.getElementById("output").innerHTML=`
+    <textarea id="generatedText" readonly onclick="this.select()"></textarea>
+
+    <div class="buttons">
+      <button onclick="copyOutput()">copy</button>
+    </div>
+  `;
+
+  document.getElementById("generatedText").value=text;
 }
 
-function copy(){
- let t=document.querySelector("#output textarea");
- t.select();
- document.execCommand("copy");
+async function copyOutput(){
+  const generatedText=document.getElementById("generatedText");
+
+  if(!generatedText) return;
+
+  try{
+    await navigator.clipboard.writeText(generatedText.value);
+  }catch(error){
+    generatedText.select();
+    document.execCommand("copy");
+  }
 }
 
-function clearOutput(){ output.innerHTML=""; }
+function clearOutput(){
+  document.getElementById("output").innerHTML="";
+}
 
 function resetForm(){
- document.querySelectorAll("input,textarea").forEach(e=>e.value="");
- document.querySelectorAll(".section").forEach(s=>s.style.display="none");
- document.querySelectorAll(".topRow input").forEach(c=>c.checked=false);
- clearOutput();
- active="";
+  document.querySelectorAll("input, textarea").forEach(element=>{
+    element.value="";
+  });
+
+  document.querySelectorAll("select").forEach(select=>{
+    select.selectedIndex=0;
+  });
+
+  document.querySelectorAll(".section").forEach(section=>{
+    section.style.display="none";
+  });
+
+  document.querySelectorAll(".topRow input").forEach(checkbox=>{
+    checkbox.checked=false;
+  });
+
+  clearOutput();
+  active="";
 }
 
 </script>
