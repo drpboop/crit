@@ -12,7 +12,7 @@ body{
 }
 
 .container{
-  max-width:1100px;
+  max-width:600px;
   margin:auto;
   background:#111;
   padding:20px;
@@ -99,51 +99,24 @@ button:hover{
   min-height:100px;
 }
 
-.logSection{
-  margin-top:35px;
-  border-top:1px solid #444;
+.logControls{
+  margin-top:30px;
   padding-top:20px;
-}
-
-.tableWrapper{
-  width:100%;
-  overflow-x:auto;
-  margin-top:15px;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:1200px;
-}
-
-th,
-td{
-  border:1px solid #444;
-  padding:8px;
-  text-align:left;
-  vertical-align:top;
-  font-size:13px;
-}
-
-th{
-  background:#222;
-}
-
-td{
-  background:#151515;
-}
-
-.deleteRowButton{
-  background:#722;
-  padding:6px 10px;
-  margin:0;
-}
-
-.emptyLog{
+  border-top:1px solid #444;
   text-align:center;
+}
+
+.logCount{
   color:#aaa;
-  padding:20px;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.status{
+  text-align:center;
+  margin-top:10px;
+  min-height:20px;
+  color:#8aff9d;
 }
 </style>
 </head>
@@ -155,20 +128,31 @@ td{
 <h2>critter</h2>
 
 <div class="topRow">
+
   <label>
-    <input type="checkbox" onclick="showForm('crit',this)">
+    <input
+      type="checkbox"
+      onclick="showForm('crit',this)"
+    >
     crit
   </label>
 
   <label>
-    <input type="checkbox" onclick="showForm('provider',this)">
+    <input
+      type="checkbox"
+      onclick="showForm('provider',this)"
+    >
     provider
   </label>
 
   <label>
-    <input type="checkbox" onclick="showForm('xfer',this)">
+    <input
+      type="checkbox"
+      onclick="showForm('xfer',this)"
+    >
     xfer
   </label>
+
 </div>
 
 <!-- CRIT -->
@@ -177,7 +161,7 @@ td{
 <label>agent name</label>
 <input id="c_name">
 
-<label>agent id</label>
+<label>agt id</label>
 <input id="c_id">
 
 <label>mbr id / pa#</label>
@@ -187,8 +171,12 @@ td{
 <input id="c_rx">
 
 <label>resolution quick select</label>
+
 <select onchange="addCrit(this.value); this.selectedIndex=0;">
-  <option value="">-- select --</option>
+
+  <option value="">
+    -- select --
+  </option>
 
   <option value="updated pa detailing on file to reflect dating approved by rph">
     pa dating
@@ -265,6 +253,7 @@ td{
   <option value="advised clinical review cannot assist // referred to ssa">
     ssa redirect
   </option>
+
 </select>
 
 <label>resolution</label>
@@ -281,6 +270,9 @@ td{
 <label>job title</label>
 <input id="p_title">
 
+<label>agt id</label>
+<input id="p_agent_id">
+
 <label>npi</label>
 <input id="p_npi">
 
@@ -294,12 +286,23 @@ td{
 <input id="p_mbr_pa">
 
 <label>rx</label>
-<input id="p_rx" oninput="updateProvider()">
+<input
+  id="p_rx"
+  oninput="updateProvider()"
+>
 
 <label>resolution quick select</label>
+
 <select onchange="providerPick(this.value); this.selectedIndex=0;">
-  <option value="">-- select --</option>
-  <option value="verbal">verbal pa request</option>
+
+  <option value="">
+    -- select --
+  </option>
+
+  <option value="verbal">
+    verbal pa request
+  </option>
+
 </select>
 
 <label>resolution</label>
@@ -316,6 +319,9 @@ td{
 <label>facility / npi</label>
 <input id="x_fac">
 
+<label>agt id</label>
+<input id="x_agent_id">
+
 <label>mbr id / pa#</label>
 <input id="x_mbr_pa">
 
@@ -326,59 +332,79 @@ td{
 <input id="x_to">
 
 <label>reason</label>
+
 <select id="x_reason">
-  <option value="">-- select --</option>
-  <option value="pa">pa</option>
-  <option value="appeal">appeal</option>
-  <option value="request p2p">request p2p</option>
-  <option value="go over denial">go over denial</option>
+
+  <option value="">
+    -- select --
+  </option>
+
+  <option value="pa">
+    pa
+  </option>
+
+  <option value="appeal">
+    appeal
+  </option>
+
+  <option value="request p2p">
+    request p2p
+  </option>
+
+  <option value="go over denial">
+    go over denial
+  </option>
+
 </select>
 
 </div>
 
 <div class="buttons">
-  <button onclick="generate()">generate</button>
-  <button onclick="clearOutput()">clear output</button>
-  <button onclick="resetForm()">reset form</button>
+
+  <button onclick="generate()">
+    generate
+  </button>
+
+  <button onclick="clearOutput()">
+    clear output
+  </button>
+
+  <button onclick="resetForm()">
+    reset form
+  </button>
+
 </div>
 
 <div id="output" class="output"></div>
 
-<!-- LOG TABLE -->
-<div class="logSection">
+<div id="saveStatus" class="status"></div>
 
-<h3>activity log</h3>
+<!-- BACKGROUND LOG -->
+<div class="logControls">
+
+<h3>background activity log</h3>
+
+<div id="logCount" class="logCount">
+  0 saved entries
+</div>
 
 <div class="buttons">
-  <button onclick="downloadCSV()">download excel csv</button>
-  <button class="dangerButton" onclick="clearLog()">clear entire log</button>
-</div>
 
-<div class="tableWrapper">
-  <table>
-    <thead>
-      <tr>
-        <th>date / time</th>
-        <th>type</th>
-        <th>name</th>
-        <th>agent id / job title</th>
-        <th>npi / facility</th>
-        <th>cb#</th>
-        <th>fax#</th>
-        <th>mbr id / pa#</th>
-        <th>rx</th>
-        <th>resolution / reason</th>
-        <th>xferred to</th>
-        <th>delete</th>
-      </tr>
-    </thead>
+  <button onclick="downloadCSV()">
+    download excel csv
+  </button>
 
-    <tbody id="logBody"></tbody>
-  </table>
-</div>
+  <button onclick="showBackgroundLog()">
+    view saved log
+  </button>
 
-<div id="emptyLog" class="emptyLog">
-  no saved entries
+  <button
+    class="dangerButton"
+    onclick="clearLog()"
+  >
+    clear saved log
+  </button>
+
 </div>
 
 </div>
@@ -392,374 +418,643 @@ let activityLog=[];
 
 /* LOAD SAVED LOG */
 window.addEventListener("DOMContentLoaded",function(){
-  const savedLog=localStorage.getItem("critterActivityLog");
+
+  const savedLog=
+    localStorage.getItem("critterBackgroundLog");
 
   if(savedLog){
+
     try{
       activityLog=JSON.parse(savedLog);
     }catch(error){
       activityLog=[];
     }
+
   }
 
-  renderLog();
+  updateLogCount();
+
 });
 
 /* SHOW SELECTED FORM */
-function showForm(type,el){
+function showForm(type,element){
+
   active=type;
 
-  document.querySelectorAll(".section").forEach(section=>{
-    section.style.display="none";
-  });
+  document
+    .querySelectorAll(".section")
+    .forEach(section=>{
+      section.style.display="none";
+    });
 
-  document.getElementById(type).style.display="block";
+  document
+    .getElementById(type)
+    .style.display="block";
 
-  document.querySelectorAll(".topRow input").forEach(checkbox=>{
-    checkbox.checked=false;
-  });
+  document
+    .querySelectorAll(".topRow input")
+    .forEach(checkbox=>{
+      checkbox.checked=false;
+    });
 
-  el.checked=true;
+  element.checked=true;
+
 }
 
 /* CRIT QUICK SELECT */
 function addCrit(value){
+
   if(!value) return;
 
-  const resolution=document.getElementById("c_res");
+  const resolution=
+    document.getElementById("c_res");
 
-  resolution.value=resolution.value
-    ? resolution.value+" // "+value
-    : value;
+  resolution.value=
+    resolution.value
+      ? resolution.value+" // "+value
+      : value;
+
 }
 
 /* PROVIDER QUICK SELECT */
 function providerPick(value){
-  if(value==="verbal"){
-    const rx=document.getElementById("p_rx").value;
 
-    document.getElementById("p_res").value=
-      `called to request a verbal pa for ${rx} // pega intake #`;
+  if(value==="verbal"){
+
+    const rx=
+      document.getElementById("p_rx").value;
+
+    document
+      .getElementById("p_res")
+      .value=
+        `called to request a verbal pa for ${rx} // pega intake #`;
+
   }
+
 }
 
+/* UPDATE PROVIDER RX IN RESOLUTION */
 function updateProvider(){
-  const resolution=document.getElementById("p_res");
-  const rx=document.getElementById("p_rx").value;
+
+  const resolution=
+    document.getElementById("p_res");
+
+  const rx=
+    document.getElementById("p_rx").value;
 
   if(resolution.value.includes("verbal pa")){
+
     resolution.value=
       `called to request a verbal pa for ${rx} // pega intake #`;
+
   }
+
 }
 
-/* XFER NOTE */
+/* BUILD XFER RESOLUTION */
 function buildXfer(){
-  const reason=document.getElementById("x_reason").value;
-  const transferredTo=document.getElementById("x_to").value;
+
+  const reason=
+    document.getElementById("x_reason").value;
+
+  const transferredTo=
+    document.getElementById("x_to").value.trim();
 
   return `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
+
 }
 
-/* GENERATE NOTE AND ADD LOG ENTRY */
+/* CREATE DATE AND TIME */
+function getDateTime(){
+
+  return new Date().toLocaleString();
+
+}
+
+/* GENERATE NOTE AND SAVE LOG */
 function generate(){
-  let text="";
+
+  let fullOutput="";
   let logEntry=null;
 
-  const now=new Date();
-  const dateTime=now.toLocaleString();
-
-  if(active==="crit"){
-    const name=document.getElementById("c_name").value.trim();
-    const agentId=document.getElementById("c_id").value.trim();
-    const memberPa=document.getElementById("c_mbr_pa").value.trim();
-    const rx=document.getElementById("c_rx").value.trim();
-    const resolution=document.getElementById("c_res").value.trim();
-
-    text=`${name} // ${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
-
-    logEntry={
-      dateTime:dateTime,
-      type:"crit",
-      name:name,
-      titleOrAgentId:agentId,
-      npiOrFacility:"",
-      callback:"",
-      fax:"",
-      memberPa:memberPa,
-      rx:rx,
-      resolution:resolution,
-      transferredTo:""
-    };
-  }
-
-  if(active==="provider"){
-    const name=document.getElementById("p_name").value.trim();
-    const title=document.getElementById("p_title").value.trim();
-    const npi=document.getElementById("p_npi").value.trim();
-    const callback=document.getElementById("p_cb").value.trim();
-    const fax=document.getElementById("p_fax").value.trim();
-    const memberPa=document.getElementById("p_mbr_pa").value.trim();
-    const rx=document.getElementById("p_rx").value.trim();
-    const resolution=document.getElementById("p_res").value.trim();
-
-    text=`${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
-
-    logEntry={
-      dateTime:dateTime,
-      type:"provider",
-      name:name,
-      titleOrAgentId:title,
-      npiOrFacility:npi,
-      callback:callback,
-      fax:fax,
-      memberPa:memberPa,
-      rx:rx,
-      resolution:resolution,
-      transferredTo:""
-    };
-  }
-
-  if(active==="xfer"){
-    const name=document.getElementById("x_name").value.trim();
-    const facility=document.getElementById("x_fac").value.trim();
-    const memberPa=document.getElementById("x_mbr_pa").value.trim();
-    const rx=document.getElementById("x_rx").value.trim();
-    const transferredTo=document.getElementById("x_to").value.trim();
-    const reason=document.getElementById("x_reason").value;
-
-    text=`${name} // ${facility} // ${rx} // ${buildXfer()} // drp crit prime 866.202.3474`;
-
-    logEntry={
-      dateTime:dateTime,
-      type:"xfer",
-      name:name,
-      titleOrAgentId:"",
-      npiOrFacility:facility,
-      callback:"",
-      fax:"",
-      memberPa:memberPa,
-      rx:rx,
-      resolution:reason,
-      transferredTo:transferredTo
-    };
-  }
-
   if(!active){
-    document.getElementById("output").innerHTML=
-      "<p style='text-align:center;'>please select a form first.</p>";
+
+    document
+      .getElementById("output")
+      .innerHTML=
+        "<p style='text-align:center;'>please select a form first.</p>";
+
     return;
+
   }
 
-  document.getElementById("output").innerHTML=`
-    <textarea id="generatedText" readonly onclick="this.select()"></textarea>
+  /* CRIT */
+  if(active==="crit"){
 
-    <div class="buttons">
-      <button onclick="copyOutput()">copy</button>
-    </div>
-  `;
+    const name=
+      document.getElementById("c_name").value.trim();
 
-  document.getElementById("generatedText").value=text;
+    const agentId=
+      document.getElementById("c_id").value.trim();
 
+    const memberPa=
+      document.getElementById("c_mbr_pa").value.trim();
+
+    const rx=
+      document.getElementById("c_rx").value.trim();
+
+    const resolution=
+      document.getElementById("c_res").value.trim();
+
+    fullOutput=
+      `${name} // ${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+
+    logEntry={
+      dateTime:getDateTime(),
+      type:"crit",
+      agentId:agentId,
+      memberPa:memberPa,
+      actionResolution:resolution
+    };
+
+  }
+
+  /* PROVIDER */
+  if(active==="provider"){
+
+    const name=
+      document.getElementById("p_name").value.trim();
+
+    const title=
+      document.getElementById("p_title").value.trim();
+
+    const agentId=
+      document.getElementById("p_agent_id").value.trim();
+
+    const memberPa=
+      document.getElementById("p_mbr_pa").value.trim();
+
+    const rx=
+      document.getElementById("p_rx").value.trim();
+
+    const resolution=
+      document.getElementById("p_res").value.trim();
+
+    /*
+      NPI, callback number, fax number,
+      AGT ID, and MBR ID/PA# remain on the form
+      but are not included in the copied output.
+    */
+    fullOutput=
+      `${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+
+    logEntry={
+      dateTime:getDateTime(),
+      type:"provider",
+      agentId:agentId,
+      memberPa:memberPa,
+      actionResolution:resolution
+    };
+
+  }
+
+  /* XFER */
+  if(active==="xfer"){
+
+    const name=
+      document.getElementById("x_name").value.trim();
+
+    const facility=
+      document.getElementById("x_fac").value.trim();
+
+    const agentId=
+      document.getElementById("x_agent_id").value.trim();
+
+    const memberPa=
+      document.getElementById("x_mbr_pa").value.trim();
+
+    const rx=
+      document.getElementById("x_rx").value.trim();
+
+    const transferResolution=
+      buildXfer();
+
+    fullOutput=
+      `${name} // ${facility} // ${rx} // ${transferResolution} // drp crit prime 866.202.3474`;
+
+    logEntry={
+      dateTime:getDateTime(),
+      type:"xfer",
+      agentId:agentId,
+      memberPa:memberPa,
+      actionResolution:transferResolution
+    };
+
+  }
+
+  document
+    .getElementById("output")
+    .innerHTML=`
+      <textarea
+        id="generatedText"
+        readonly
+        onclick="this.select()"
+      ></textarea>
+
+      <div class="buttons">
+        <button onclick="copyOutput()">
+          copy
+        </button>
+      </div>
+    `;
+
+  document
+    .getElementById("generatedText")
+    .value=fullOutput;
+
+  /*
+    SAVE LOG ENTRY IN BROWSER STORAGE
+  */
   if(logEntry){
+
     activityLog.unshift(logEntry);
-    saveLog();
-    renderLog();
+
+    saveBackgroundLog();
+
+    updateLogCount();
+
+    showStatus("entry added to background log");
+
   }
+
 }
 
 /* COPY GENERATED NOTE */
 async function copyOutput(){
-  const generatedText=document.getElementById("generatedText");
+
+  const generatedText=
+    document.getElementById("generatedText");
 
   if(!generatedText) return;
 
   try{
-    await navigator.clipboard.writeText(generatedText.value);
+
+    await navigator.clipboard.writeText(
+      generatedText.value
+    );
+
+    showStatus("note copied");
+
   }catch(error){
+
     generatedText.select();
+
     document.execCommand("copy");
+
+    showStatus("note copied");
+
   }
+
+}
+
+/* STATUS MESSAGE */
+function showStatus(message,isError=false){
+
+  const status=
+    document.getElementById("saveStatus");
+
+  status.textContent=message;
+
+  status.style.color=
+    isError ? "#ff8a8a" : "#8aff9d";
+
+  setTimeout(function(){
+
+    status.textContent="";
+
+  },3000);
+
 }
 
 /* CLEAR GENERATED OUTPUT */
 function clearOutput(){
-  document.getElementById("output").innerHTML="";
+
+  document
+    .getElementById("output")
+    .innerHTML="";
+
+  document
+    .getElementById("saveStatus")
+    .textContent="";
+
 }
 
 /* RESET FORM */
 function resetForm(){
-  document.querySelectorAll(".section input").forEach(element=>{
-    element.value="";
-  });
 
-  document.querySelectorAll(".section textarea").forEach(element=>{
-    element.value="";
-  });
+  document
+    .querySelectorAll(".section input")
+    .forEach(element=>{
+      element.value="";
+    });
 
-  document.querySelectorAll(".section select").forEach(select=>{
-    select.selectedIndex=0;
-  });
+  document
+    .querySelectorAll(".section textarea")
+    .forEach(element=>{
+      element.value="";
+    });
 
-  document.querySelectorAll(".section").forEach(section=>{
-    section.style.display="none";
-  });
+  document
+    .querySelectorAll(".section select")
+    .forEach(select=>{
+      select.selectedIndex=0;
+    });
 
-  document.querySelectorAll(".topRow input").forEach(checkbox=>{
-    checkbox.checked=false;
-  });
+  document
+    .querySelectorAll(".section")
+    .forEach(section=>{
+      section.style.display="none";
+    });
+
+  document
+    .querySelectorAll(".topRow input")
+    .forEach(checkbox=>{
+      checkbox.checked=false;
+    });
 
   clearOutput();
+
   active="";
+
 }
 
 /* SAVE LOG TO BROWSER */
-function saveLog(){
+function saveBackgroundLog(){
+
   localStorage.setItem(
-    "critterActivityLog",
+    "critterBackgroundLog",
     JSON.stringify(activityLog)
   );
+
 }
 
-/* DISPLAY LOG TABLE */
-function renderLog(){
-  const logBody=document.getElementById("logBody");
-  const emptyLog=document.getElementById("emptyLog");
+/* UPDATE SAVED ENTRY COUNT */
+function updateLogCount(){
 
-  logBody.innerHTML="";
+  const count=activityLog.length;
+
+  document
+    .getElementById("logCount")
+    .textContent=
+      count===1
+        ? "1 saved entry"
+        : `${count} saved entries`;
+
+}
+
+/* VIEW SAVED LOG */
+function showBackgroundLog(){
 
   if(activityLog.length===0){
-    emptyLog.style.display="block";
+
+    alert("there are no saved entries.");
+
     return;
+
   }
 
-  emptyLog.style.display="none";
+  const logWindow=
+    window.open("","_blank");
 
-  activityLog.forEach((entry,index)=>{
-    const row=document.createElement("tr");
+  if(!logWindow){
 
-    row.innerHTML=`
-      <td>${escapeHTML(entry.dateTime)}</td>
-      <td>${escapeHTML(entry.type)}</td>
-      <td>${escapeHTML(entry.name)}</td>
-      <td>${escapeHTML(entry.titleOrAgentId)}</td>
-      <td>${escapeHTML(entry.npiOrFacility)}</td>
-      <td>${escapeHTML(entry.callback)}</td>
-      <td>${escapeHTML(entry.fax)}</td>
-      <td>${escapeHTML(entry.memberPa)}</td>
-      <td>${escapeHTML(entry.rx)}</td>
-      <td>${escapeHTML(entry.resolution)}</td>
-      <td>${escapeHTML(entry.transferredTo)}</td>
-      <td>
-        <button
-          class="deleteRowButton"
-          onclick="deleteLogEntry(${index})">
-          delete
-        </button>
-      </td>
+    alert(
+      "please allow pop-ups to view the saved log."
+    );
+
+    return;
+
+  }
+
+  let rows="";
+
+  activityLog.forEach(entry=>{
+
+    rows+=`
+      <tr>
+        <td>${escapeHTML(entry.dateTime)}</td>
+        <td>${escapeHTML(entry.type)}</td>
+        <td>${escapeHTML(entry.agentId)}</td>
+        <td>${escapeHTML(entry.memberPa)}</td>
+        <td>${escapeHTML(entry.actionResolution)}</td>
+      </tr>
     `;
 
-    logBody.appendChild(row);
   });
+
+  logWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+
+      <title>critter activity log</title>
+
+      <style>
+
+        body{
+          background:#000;
+          color:#fff;
+          font-family:"Century Gothic",sans-serif;
+          padding:20px;
+        }
+
+        table{
+          width:100%;
+          border-collapse:collapse;
+        }
+
+        th,
+        td{
+          border:1px solid #555;
+          padding:10px;
+          text-align:left;
+          vertical-align:top;
+        }
+
+        th{
+          background:#222;
+        }
+
+        td{
+          background:#111;
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <h2>critter activity log</h2>
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>date/time</th>
+            <th>type</th>
+            <th>agt id</th>
+            <th>mbr id/pa#</th>
+            <th>action/res</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          ${rows}
+        </tbody>
+
+      </table>
+
+    </body>
+
+    </html>
+  `);
+
+  logWindow.document.close();
+
 }
 
-/* PROTECT TABLE DISPLAY */
+/* PROTECT DISPLAYED TEXT */
 function escapeHTML(value){
-  const div=document.createElement("div");
+
+  const div=
+    document.createElement("div");
+
   div.textContent=value || "";
+
   return div.innerHTML;
+
 }
 
-/* DELETE ONE LOG ENTRY */
-function deleteLogEntry(index){
-  activityLog.splice(index,1);
-  saveLog();
-  renderLog();
-}
-
-/* CLEAR ENTIRE LOG */
+/* CLEAR SAVED LOG */
 function clearLog(){
-  const confirmed=confirm(
-    "are you sure you want to clear the entire activity log?"
-  );
+
+  if(activityLog.length===0){
+
+    alert("there are no saved entries.");
+
+    return;
+
+  }
+
+  const confirmed=
+    confirm(
+      "are you sure you want to clear the entire background log?"
+    );
 
   if(!confirmed) return;
 
   activityLog=[];
-  localStorage.removeItem("critterActivityLog");
-  renderLog();
+
+  localStorage.removeItem(
+    "critterBackgroundLog"
+  );
+
+  updateLogCount();
+
+  showStatus("background log cleared");
+
 }
 
 /* DOWNLOAD CSV FOR EXCEL */
 function downloadCSV(){
+
   if(activityLog.length===0){
-    alert("there are no log entries to download.");
+
+    alert(
+      "there are no saved entries to download."
+    );
+
     return;
+
   }
 
   const headers=[
-    "Date / Time",
+    "Date/Time",
     "Type",
-    "Name",
-    "Agent ID / Job Title",
-    "NPI / Facility",
-    "CB#",
-    "Fax#",
-    "MBR ID / PA#",
-    "RX",
-    "Resolution / Reason",
-    "Xferred To"
+    "AGT ID",
+    "MBR ID/PA#",
+    "Action/Res"
   ];
 
-  const rows=activityLog.map(entry=>[
-    entry.dateTime,
-    entry.type,
-    entry.name,
-    entry.titleOrAgentId,
-    entry.npiOrFacility,
-    entry.callback,
-    entry.fax,
-    entry.memberPa,
-    entry.rx,
-    entry.resolution,
-    entry.transferredTo
-  ]);
+  const rows=
+    activityLog.map(entry=>[
+      entry.dateTime,
+      entry.type,
+      entry.agentId,
+      entry.memberPa,
+      entry.actionResolution
+    ]);
 
   const csvData=[
     headers,
     ...rows
   ]
   .map(row=>
-    row.map(value=>csvEscape(value)).join(",")
+    row
+      .map(value=>csvEscape(value))
+      .join(",")
   )
   .join("\n");
 
-  const blob=new Blob(
-    ["\uFEFF"+csvData],
-    {type:"text/csv;charset=utf-8;"}
-  );
+  const blob=
+    new Blob(
+      ["\uFEFF"+csvData],
+      {
+        type:"text/csv;charset=utf-8;"
+      }
+    );
 
-  const link=document.createElement("a");
-  const url=URL.createObjectURL(blob);
+  const link=
+    document.createElement("a");
 
-  const today=new Date()
-    .toISOString()
-    .split("T")[0];
+  const url=
+    URL.createObjectURL(blob);
+
+  const today=
+    new Date()
+      .toISOString()
+      .split("T")[0];
 
   link.href=url;
-  link.download=`critter-activity-log-${today}.csv`;
+
+  link.download=
+    `critter-activity-log-${today}.csv`;
 
   document.body.appendChild(link);
+
   link.click();
+
   document.body.removeChild(link);
 
   URL.revokeObjectURL(url);
+
+  showStatus("excel csv downloaded");
+
 }
 
-/* FORMAT CSV CELLS */
+/* FORMAT CSV VALUES */
 function csvEscape(value){
-  const text=String(value || "").replace(/"/g,'""');
+
+  const text=
+    String(value || "")
+      .replace(/"/g,'""');
+
   return `"${text}"`;
+
 }
 
 </script>
