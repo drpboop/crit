@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,6 +119,15 @@ button:hover{
   min-height:20px;
   color:#8aff9d;
 }
+
+.transferFields{
+  display:none;
+  margin-top:15px;
+  padding:12px;
+  border:1px solid #333;
+  border-radius:8px;
+  background:#181818;
+}
 </style>
 </head>
 
@@ -145,21 +155,10 @@ button:hover{
     provider
   </label>
 
-  <label>
-    <input
-      type="checkbox"
-      onclick="showForm('xfer',this)"
-    >
-    xfer
-  </label>
-
 </div>
 
 <!-- CRIT -->
 <div id="crit" class="section">
-
-<label>agent name</label>
-<input id="c_name">
 
 <label>agt id</label>
 <input id="c_id">
@@ -170,7 +169,7 @@ button:hover{
 <label>rx</label>
 <input id="c_rx">
 
-<label>resolution quick select</label>
+<label>res</label>
 
 <select onchange="addCrit(this.value); this.selectedIndex=0;">
 
@@ -254,6 +253,14 @@ button:hover{
     ssa redirect
   </option>
 
+  <option value="xfer to correct crit lob">
+    xfer to correct crit lob
+  </option>
+
+  <option value="xfer to correct lob">
+    xfer to correct lob
+  </option>
+
 </select>
 
 <label>resolution</label>
@@ -270,10 +277,7 @@ button:hover{
 <label>job title</label>
 <input id="p_title">
 
-<label>agt id</label>
-<input id="p_agent_id">
-
-<label>npi</label>
+<label>npi#</label>
 <input id="p_npi">
 
 <label>cb#</label>
@@ -288,12 +292,15 @@ button:hover{
 <label>rx</label>
 <input
   id="p_rx"
-  oninput="updateProvider()"
+  oninput="updateProviderResolution()"
 >
 
-<label>resolution quick select</label>
+<label>res</label>
 
-<select onchange="providerPick(this.value); this.selectedIndex=0;">
+<select
+  id="p_quick_select"
+  onchange="providerPick(this.value)"
+>
 
   <option value="">
     -- select --
@@ -303,59 +310,57 @@ button:hover{
     verbal pa request
   </option>
 
+  <option value="transfer">
+    transfer
+  </option>
+
 </select>
 
-<label>resolution</label>
-<textarea id="p_res"></textarea>
+<div
+  id="providerTransferFields"
+  class="transferFields"
+>
+
+  <label>xfer reason</label>
+
+  <select
+    id="p_xfer_reason"
+    onchange="updateProviderResolution()"
+  >
+
+    <option value="">
+      -- select --
+    </option>
+
+    <option value="pa">
+      pa
+    </option>
+
+    <option value="appeal">
+      appeal
+    </option>
+
+    <option value="request p2p">
+      request p2p
+    </option>
+
+    <option value="go over denial">
+      go over denial
+    </option>
+
+  </select>
+
+  <label>xferred to</label>
+
+  <input
+    id="p_xfer_to"
+    oninput="updateProviderResolution()"
+  >
 
 </div>
 
-<!-- XFER -->
-<div id="xfer" class="section">
-
-<label>caller name</label>
-<input id="x_name">
-
-<label>facility / npi</label>
-<input id="x_fac">
-
-<label>agt id</label>
-<input id="x_agent_id">
-
-<label>mbr id / pa#</label>
-<input id="x_mbr_pa">
-
-<label>rx</label>
-<input id="x_rx">
-
-<label>xferred to</label>
-<input id="x_to">
-
-<label>reason</label>
-
-<select id="x_reason">
-
-  <option value="">
-    -- select --
-  </option>
-
-  <option value="pa">
-    pa
-  </option>
-
-  <option value="appeal">
-    appeal
-  </option>
-
-  <option value="request p2p">
-    request p2p
-  </option>
-
-  <option value="go over denial">
-    go over denial
-  </option>
-
-</select>
+<label>resolution</label>
+<textarea id="p_res"></textarea>
 
 </div>
 
@@ -415,6 +420,7 @@ button:hover{
 
 let active="";
 let activityLog=[];
+let providerMode="provider";
 
 /* LOAD SAVED LOG */
 window.addEventListener("DOMContentLoaded",function(){
@@ -479,48 +485,77 @@ function addCrit(value){
 /* PROVIDER QUICK SELECT */
 function providerPick(value){
 
+  const transferFields=
+    document.getElementById("providerTransferFields");
+
+  const resolution=
+    document.getElementById("p_res");
+
   if(value==="verbal"){
 
-    const rx=
-      document.getElementById("p_rx").value;
+    providerMode="provider";
 
-    document
-      .getElementById("p_res")
-      .value=
-        `called to request a verbal pa for ${rx} // pega intake #`;
+    transferFields.style.display="none";
+
+    document.getElementById("p_xfer_reason").selectedIndex=0;
+    document.getElementById("p_xfer_to").value="";
+
+    const rx=
+      document.getElementById("p_rx").value.trim();
+
+    resolution.value=
+      `called to request a verbal pa for ${rx} // pega intake #`;
+
+  }else if(value==="transfer"){
+
+    providerMode="xfer";
+
+    transferFields.style.display="block";
+
+    updateProviderResolution();
+
+  }else{
+
+    providerMode="provider";
+
+    transferFields.style.display="none";
 
   }
 
 }
 
-/* UPDATE PROVIDER RX IN RESOLUTION */
-function updateProvider(){
+/* UPDATE PROVIDER RESOLUTION */
+function updateProviderResolution(){
 
   const resolution=
     document.getElementById("p_res");
 
   const rx=
-    document.getElementById("p_rx").value;
+    document.getElementById("p_rx").value.trim();
 
-  if(resolution.value.includes("verbal pa")){
+  const reason=
+    document.getElementById("p_xfer_reason").value;
 
-    resolution.value=
-      `called to request a verbal pa for ${rx} // pega intake #`;
+  const transferredTo=
+    document.getElementById("p_xfer_to").value.trim();
+
+  if(providerMode==="provider"){
+
+    if(resolution.value.includes("verbal pa")){
+
+      resolution.value=
+        `called to request a verbal pa for ${rx} // pega intake #`;
+
+    }
 
   }
 
-}
+  if(providerMode==="xfer"){
 
-/* BUILD XFER RESOLUTION */
-function buildXfer(){
+    resolution.value=
+      `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
 
-  const reason=
-    document.getElementById("x_reason").value;
-
-  const transferredTo=
-    document.getElementById("x_to").value.trim();
-
-  return `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
+  }
 
 }
 
@@ -551,9 +586,6 @@ function generate(){
   /* CRIT */
   if(active==="crit"){
 
-    const name=
-      document.getElementById("c_name").value.trim();
-
     const agentId=
       document.getElementById("c_id").value.trim();
 
@@ -567,7 +599,7 @@ function generate(){
       document.getElementById("c_res").value.trim();
 
     fullOutput=
-      `${name} // ${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+      `${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
 
     logEntry={
       dateTime:getDateTime(),
@@ -579,7 +611,7 @@ function generate(){
 
   }
 
-  /* PROVIDER */
+  /* PROVIDER OR XFER */
   if(active==="provider"){
 
     const name=
@@ -587,9 +619,6 @@ function generate(){
 
     const title=
       document.getElementById("p_title").value.trim();
-
-    const agentId=
-      document.getElementById("p_agent_id").value.trim();
 
     const memberPa=
       document.getElementById("p_mbr_pa").value.trim();
@@ -600,54 +629,15 @@ function generate(){
     const resolution=
       document.getElementById("p_res").value.trim();
 
-    /*
-      NPI, callback number, fax number,
-      AGT ID, and MBR ID/PA# remain on the form
-      but are not included in the copied output.
-    */
     fullOutput=
       `${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
 
     logEntry={
       dateTime:getDateTime(),
-      type:"provider",
-      agentId:agentId,
+      type:providerMode==="xfer" ? "xfer" : "provider",
+      agentId:"",
       memberPa:memberPa,
       actionResolution:resolution
-    };
-
-  }
-
-  /* XFER */
-  if(active==="xfer"){
-
-    const name=
-      document.getElementById("x_name").value.trim();
-
-    const facility=
-      document.getElementById("x_fac").value.trim();
-
-    const agentId=
-      document.getElementById("x_agent_id").value.trim();
-
-    const memberPa=
-      document.getElementById("x_mbr_pa").value.trim();
-
-    const rx=
-      document.getElementById("x_rx").value.trim();
-
-    const transferResolution=
-      buildXfer();
-
-    fullOutput=
-      `${name} // ${facility} // ${rx} // ${transferResolution} // drp crit prime 866.202.3474`;
-
-    logEntry={
-      dateTime:getDateTime(),
-      type:"xfer",
-      agentId:agentId,
-      memberPa:memberPa,
-      actionResolution:transferResolution
     };
 
   }
@@ -672,9 +662,6 @@ function generate(){
     .getElementById("generatedText")
     .value=fullOutput;
 
-  /*
-    SAVE LOG ENTRY IN BROWSER STORAGE
-  */
   if(logEntry){
 
     activityLog.unshift(logEntry);
@@ -781,6 +768,12 @@ function resetForm(){
     .forEach(checkbox=>{
       checkbox.checked=false;
     });
+
+  document
+    .getElementById("providerTransferFields")
+    .style.display="none";
+
+  providerMode="provider";
 
   clearOutput();
 
@@ -1061,3 +1054,4 @@ function csvEscape(value){
 
 </body>
 </html>
+```
