@@ -127,6 +127,16 @@ button:hover{
   border-radius:8px;
   background:#181818;
 }
+
+.resetArea{
+  text-align:center;
+  margin-top:10px;
+}
+
+.clearLogArea{
+  text-align:center;
+  margin-top:8px;
+}
 </style>
 </head>
 
@@ -305,8 +315,8 @@ button:hover{
     verbal pa request
   </option>
 
-  <option value="transfer">
-    transfer
+  <option value="xfer">
+    xfer
   </option>
 
 </select>
@@ -362,20 +372,25 @@ button:hover{
 <div class="buttons">
 
   <button onclick="generate()">
-    generate
+    create
   </button>
 
   <button onclick="clearOutput()">
-    clear output
-  </button>
-
-  <button onclick="resetForm()">
-    reset form
+    clear
   </button>
 
 </div>
 
 <div id="output" class="output"></div>
+
+<!-- RESET ALWAYS VISIBLE BELOW OUTPUT/COPY -->
+<div class="resetArea">
+
+  <button onclick="resetForm()">
+    reset
+  </button>
+
+</div>
 
 <div id="saveStatus" class="status"></div>
 
@@ -391,18 +406,22 @@ button:hover{
 <div class="buttons">
 
   <button onclick="downloadCSV()">
-    download excel csv
+    pop
   </button>
 
   <button onclick="showActivityLog()">
-    view activity log
+    view
   </button>
+
+</div>
+
+<div class="clearLogArea">
 
   <button
     class="dangerButton"
     onclick="clearLog()"
   >
-    clear activity log
+    clear log
   </button>
 
 </div>
@@ -447,10 +466,6 @@ window.addEventListener("DOMContentLoaded",function(){
 
   }
 
-  /*
-    Adds IDs to older saved entries that may not
-    already have them.
-  */
   let logChanged=false;
 
   activityLog.forEach(entry=>{
@@ -545,7 +560,7 @@ function providerPick(value){
     resolution.value=
       `called to request a verbal pa for ${rx} // pega intake #`;
 
-  }else if(value==="transfer"){
+  }else if(value==="xfer"){
 
     providerMode="xfer";
 
@@ -605,7 +620,7 @@ function getDateTime(){
 
 }
 
-/* GENERATE NOTE AND SAVE LOG */
+/* CREATE NOTE AND SAVE LOG */
 function generate(){
 
   let fullOutput="";
@@ -719,7 +734,7 @@ function generate(){
 
 }
 
-/* COPY GENERATED NOTE */
+/* COPY CREATED NOTE */
 async function copyOutput(){
 
   const generatedText=
@@ -768,7 +783,7 @@ function showStatus(message,isError=false){
 
 }
 
-/* CLEAR GENERATED OUTPUT */
+/* CLEAR CREATED OUTPUT */
 function clearOutput(){
 
   document
@@ -1110,7 +1125,7 @@ function escapeHTML(value){
 
 }
 
-/* PROTECT VALUES USED IN POPUP JAVASCRIPT */
+/* PROTECT POPUP JAVASCRIPT VALUES */
 function escapeJavaScript(value){
 
   return String(value || "")
