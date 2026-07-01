@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -253,12 +252,8 @@ button:hover{
     ssa redirect
   </option>
 
-  <option value="xfer to correct crit lob">
-    xfer to correct crit lob
-  </option>
-
   <option value="xfer to correct lob">
-    xfer to correct lob
+    xfer
   </option>
 
 </select>
@@ -384,10 +379,10 @@ button:hover{
 
 <div id="saveStatus" class="status"></div>
 
-<!-- BACKGROUND LOG -->
+<!-- ACTIVITY LOG -->
 <div class="logControls">
 
-<h3>background activity log</h3>
+<h3>activity log</h3>
 
 <div id="logCount" class="logCount">
   0 saved entries
@@ -399,15 +394,15 @@ button:hover{
     download excel csv
   </button>
 
-  <button onclick="showBackgroundLog()">
-    view saved log
+  <button onclick="showActivityLog()">
+    view activity log
   </button>
 
   <button
     class="dangerButton"
     onclick="clearLog()"
   >
-    clear saved log
+    clear activity log
   </button>
 
 </div>
@@ -422,19 +417,56 @@ let active="";
 let activityLog=[];
 let providerMode="provider";
 
+/* CREATE UNIQUE LOG ID */
+function createLogId(){
+
+  return (
+    Date.now().toString()+
+    Math.random().toString(16).slice(2)
+  );
+
+}
+
 /* LOAD SAVED LOG */
 window.addEventListener("DOMContentLoaded",function(){
 
   const savedLog=
-    localStorage.getItem("critterBackgroundLog");
+    localStorage.getItem("critterActivityLog");
 
   if(savedLog){
 
     try{
+
       activityLog=JSON.parse(savedLog);
+
     }catch(error){
+
       activityLog=[];
+
     }
+
+  }
+
+  /*
+    Adds IDs to older saved entries that may not
+    already have them.
+  */
+  let logChanged=false;
+
+  activityLog.forEach(entry=>{
+
+    if(!entry.id){
+
+      entry.id=createLogId();
+      logChanged=true;
+
+    }
+
+  });
+
+  if(logChanged){
+
+    saveActivityLog();
 
   }
 
@@ -486,7 +518,9 @@ function addCrit(value){
 function providerPick(value){
 
   const transferFields=
-    document.getElementById("providerTransferFields");
+    document.getElementById(
+      "providerTransferFields"
+    );
 
   const resolution=
     document.getElementById("p_res");
@@ -497,8 +531,13 @@ function providerPick(value){
 
     transferFields.style.display="none";
 
-    document.getElementById("p_xfer_reason").selectedIndex=0;
-    document.getElementById("p_xfer_to").value="";
+    document
+      .getElementById("p_xfer_reason")
+      .selectedIndex=0;
+
+    document
+      .getElementById("p_xfer_to")
+      .value="";
 
     const rx=
       document.getElementById("p_rx").value.trim();
@@ -602,6 +641,7 @@ function generate(){
       `${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
 
     logEntry={
+      id:createLogId(),
       dateTime:getDateTime(),
       type:"crit",
       agentId:agentId,
@@ -633,9 +673,12 @@ function generate(){
       `${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
 
     logEntry={
+      id:createLogId(),
       dateTime:getDateTime(),
-      type:providerMode==="xfer" ? "xfer" : "provider",
-      agentId:"",
+      type:providerMode==="xfer"
+        ? "xfer"
+        : "provider",
+      agentId:name,
       memberPa:memberPa,
       actionResolution:resolution
     };
@@ -666,11 +709,11 @@ function generate(){
 
     activityLog.unshift(logEntry);
 
-    saveBackgroundLog();
+    saveActivityLog();
 
     updateLogCount();
 
-    showStatus("entry added to background log");
+    showStatus("added");
 
   }
 
@@ -713,7 +756,9 @@ function showStatus(message,isError=false){
   status.textContent=message;
 
   status.style.color=
-    isError ? "#ff8a8a" : "#8aff9d";
+    isError
+      ? "#ff8a8a"
+      : "#8aff9d";
 
   setTimeout(function(){
 
@@ -781,17 +826,17 @@ function resetForm(){
 
 }
 
-/* SAVE LOG TO BROWSER */
-function saveBackgroundLog(){
+/* SAVE ACTIVITY LOG */
+function saveActivityLog(){
 
   localStorage.setItem(
-    "critterBackgroundLog",
+    "critterActivityLog",
     JSON.stringify(activityLog)
   );
 
 }
 
-/* UPDATE SAVED ENTRY COUNT */
+/* UPDATE ENTRY COUNT */
 function updateLogCount(){
 
   const count=activityLog.length;
@@ -805,8 +850,24 @@ function updateLogCount(){
 
 }
 
-/* VIEW SAVED LOG */
-function showBackgroundLog(){
+/* DELETE ONE ACTIVITY LOG ENTRY */
+function deleteLogEntry(entryId){
+
+  activityLog=
+    activityLog.filter(entry=>
+      entry.id!==entryId
+    );
+
+  saveActivityLog();
+
+  updateLogCount();
+
+  showStatus("entry deleted");
+
+}
+
+/* VIEW ACTIVITY LOG */
+function showActivityLog(){
 
   if(activityLog.length===0){
 
@@ -817,12 +878,15 @@ function showBackgroundLog(){
   }
 
   const logWindow=
-    window.open("","_blank");
+    window.open(
+      "",
+      "critterActivityLogWindow"
+    );
 
   if(!logWindow){
 
     alert(
-      "please allow pop-ups to view the saved log."
+      "please allow pop-ups to view the activity log."
     );
 
     return;
@@ -834,16 +898,46 @@ function showBackgroundLog(){
   activityLog.forEach(entry=>{
 
     rows+=`
-      <tr>
-        <td>${escapeHTML(entry.dateTime)}</td>
-        <td>${escapeHTML(entry.type)}</td>
-        <td>${escapeHTML(entry.agentId)}</td>
-        <td>${escapeHTML(entry.memberPa)}</td>
-        <td>${escapeHTML(entry.actionResolution)}</td>
+      <tr data-entry-id="${escapeHTML(entry.id)}">
+
+        <td>
+          ${escapeHTML(entry.dateTime)}
+        </td>
+
+        <td>
+          ${escapeHTML(entry.type)}
+        </td>
+
+        <td>
+          ${escapeHTML(entry.agentId)}
+        </td>
+
+        <td>
+          ${escapeHTML(entry.memberPa)}
+        </td>
+
+        <td>
+          ${escapeHTML(entry.actionResolution)}
+        </td>
+
+        <td>
+          <button
+            class="deleteButton"
+            onclick="deleteEntry(
+              '${escapeJavaScript(entry.id)}',
+              this
+            )"
+          >
+            delete
+          </button>
+        </td>
+
       </tr>
     `;
 
   });
+
+  logWindow.document.open();
 
   logWindow.document.write(`
     <!DOCTYPE html>
@@ -860,6 +954,10 @@ function showBackgroundLog(){
           color:#fff;
           font-family:"Century Gothic",sans-serif;
           padding:20px;
+        }
+
+        h2{
+          text-align:center;
         }
 
         table{
@@ -883,15 +981,38 @@ function showBackgroundLog(){
           background:#111;
         }
 
+        button{
+          padding:7px 12px;
+          border:none;
+          border-radius:6px;
+          cursor:pointer;
+          color:#fff;
+        }
+
+        .deleteButton{
+          background:#722;
+        }
+
+        .deleteButton:hover{
+          background:#933;
+        }
+
+        .emptyMessage{
+          display:none;
+          text-align:center;
+          margin-top:20px;
+          color:#aaa;
+        }
+
       </style>
 
     </head>
 
     <body>
 
-      <h2>critter activity log</h2>
+      <h2>activity log</h2>
 
-      <table>
+      <table id="activityTable">
 
         <thead>
 
@@ -901,6 +1022,7 @@ function showBackgroundLog(){
             <th>agt id</th>
             <th>mbr id/pa#</th>
             <th>action/res</th>
+            <th>delete</th>
           </tr>
 
         </thead>
@@ -911,6 +1033,62 @@ function showBackgroundLog(){
 
       </table>
 
+      <div
+        id="emptyMessage"
+        class="emptyMessage"
+      >
+        no saved entries
+      </div>
+
+      <script>
+
+        function deleteEntry(entryId,button){
+
+          const confirmed=
+            confirm(
+              "delete this activity log entry?"
+            );
+
+          if(!confirmed) return;
+
+          if(
+            window.opener &&
+            !window.opener.closed
+          ){
+
+            window.opener
+              .deleteLogEntry(entryId);
+
+          }
+
+          const row=
+            button.closest("tr");
+
+          if(row){
+            row.remove();
+          }
+
+          const remainingRows=
+            document.querySelectorAll(
+              "#activityTable tbody tr"
+            );
+
+          if(remainingRows.length===0){
+
+            document
+              .getElementById("activityTable")
+              .style.display="none";
+
+            document
+              .getElementById("emptyMessage")
+              .style.display="block";
+
+          }
+
+        }
+
+      <\/script>
+
     </body>
 
     </html>
@@ -920,7 +1098,7 @@ function showBackgroundLog(){
 
 }
 
-/* PROTECT DISPLAYED TEXT */
+/* PROTECT DISPLAYED HTML */
 function escapeHTML(value){
 
   const div=
@@ -932,7 +1110,16 @@ function escapeHTML(value){
 
 }
 
-/* CLEAR SAVED LOG */
+/* PROTECT VALUES USED IN POPUP JAVASCRIPT */
+function escapeJavaScript(value){
+
+  return String(value || "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
+}
+
+/* CLEAR ENTIRE ACTIVITY LOG */
 function clearLog(){
 
   if(activityLog.length===0){
@@ -945,7 +1132,7 @@ function clearLog(){
 
   const confirmed=
     confirm(
-      "are you sure you want to clear the entire background log?"
+      "are you sure you want to clear the entire activity log?"
     );
 
   if(!confirmed) return;
@@ -953,12 +1140,12 @@ function clearLog(){
   activityLog=[];
 
   localStorage.removeItem(
-    "critterBackgroundLog"
+    "critterActivityLog"
   );
 
   updateLogCount();
 
-  showStatus("background log cleared");
+  showStatus("activity log cleared");
 
 }
 
@@ -1054,4 +1241,3 @@ function csvEscape(value){
 
 </body>
 </html>
-```
