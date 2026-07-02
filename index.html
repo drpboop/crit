@@ -1,146 +1,201 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>critter</title>
 
 <style>
-body{
-  background:#000;
-  color:#fff;
-  font-family:"Century Gothic",sans-serif;
-  padding:20px;
+
+* {
+  box-sizing: border-box;
 }
 
-.container{
-  max-width:600px;
-  margin:auto;
-  background:#111;
-  padding:20px;
-  border-radius:10px;
-  box-sizing:border-box;
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: "Century Gothic", sans-serif;
+}
+
+.site-nav {
+  background: #111;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid #333;
+}
+
+.site-nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+  background: #444;
+}
+
+.page {
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: #111;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 h2,
-h3{
-  text-align:center;
+h3 {
+  text-align: center;
 }
 
-.topRow{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-bottom:15px;
+.topRow {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 15px;
 }
 
-.topRow label{
-  display:flex;
-  align-items:center;
-  gap:5px;
+.topRow label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 input,
 select,
-textarea{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border:none;
-  border-radius:6px;
-  background:#222;
-  color:#fff;
-  box-sizing:border-box;
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 6px;
+  background: #222;
+  color: #fff;
 }
 
-textarea{
-  min-height:70px;
+textarea {
+  min-height: 70px;
 }
 
-label{
-  display:block;
-  margin-top:10px;
+label {
+  display: block;
+  margin-top: 10px;
 }
 
-.section{
-  display:none;
+.section {
+  display: none;
 }
 
-.buttons{
-  text-align:center;
-  margin-top:15px;
+.buttons {
+  text-align: center;
+  margin-top: 15px;
 }
 
-button{
-  padding:8px 14px;
-  margin:5px;
-  background:#444;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+button {
+  padding: 8px 14px;
+  margin: 5px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-button:hover{
-  background:#555;
+button:hover {
+  background: #555;
 }
 
-.dangerButton{
-  background:#722;
+.dangerButton {
+  background: #722;
 }
 
-.dangerButton:hover{
-  background:#933;
+.dangerButton:hover {
+  background: #933;
 }
 
-.output{
-  margin-top:15px;
+.output {
+  margin-top: 15px;
 }
 
-.output textarea{
-  min-height:100px;
+.output textarea {
+  min-height: 100px;
 }
 
-.logControls{
-  margin-top:30px;
-  padding-top:20px;
-  border-top:1px solid #444;
-  text-align:center;
+.logControls {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
+  text-align: center;
 }
 
-.logCount{
-  color:#aaa;
-  font-size:14px;
-  margin-bottom:8px;
+.logCount {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
-.status{
-  text-align:center;
-  margin-top:10px;
-  min-height:20px;
-  color:#8aff9d;
+.status {
+  text-align: center;
+  margin-top: 10px;
+  min-height: 20px;
+  color: #8aff9d;
 }
 
-.transferFields{
-  display:none;
-  margin-top:15px;
-  padding:12px;
-  border:1px solid #333;
-  border-radius:8px;
-  background:#181818;
+.transferFields {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #181818;
 }
 
-.resetArea{
-  text-align:center;
-  margin-top:10px;
+.resetArea,
+.clearLogArea {
+  text-align: center;
+  margin-top: 10px;
 }
 
-.clearLogArea{
-  text-align:center;
-  margin-top:8px;
-}
 </style>
 </head>
 
 <body>
+
+<nav class="site-nav">
+
+  <a href="https://drpboop.github.io/home/">
+    home
+  </a>
+
+  <a
+    class="active"
+    href="https://drpboop.github.io/crit/"
+  >
+    critter
+  </a>
+
+  <a href="https://drpboop.github.io/refill-lookback/">
+    refill lookback
+  </a>
+
+</nav>
+
+<div class="page">
 
 <div class="container">
 
@@ -166,8 +221,10 @@ button:hover{
 
 </div>
 
-<!-- CRIT -->
-<div id="crit" class="section">
+<div
+  id="crit"
+  class="section"
+>
 
 <label>agt id</label>
 <input id="c_id">
@@ -180,91 +237,96 @@ button:hover{
 
 <label>res</label>
 
-<select onchange="addCrit(this.value); this.selectedIndex=0;">
+<select
+  onchange="
+    addCrit(this.value);
+    this.selectedIndex=0;
+  "
+>
 
-  <option value="">
-    -- select --
-  </option>
+<option value="">
+  -- select --
+</option>
 
-  <option value="updated pa detailing on file to reflect dating approved by rph">
-    pa dating
-  </option>
+<option value="updated pa detailing on file to reflect dating approved by rph">
+  pa dating
+</option>
 
-  <option value="updated pa detailing on file to reflect strength approved by rph">
-    pa strength
-  </option>
+<option value="updated pa detailing on file to reflect strength approved by rph">
+  pa strength
+</option>
 
-  <option value="updated pa detailing on file to reflect drug approved by rph">
-    pa drug
-  </option>
+<option value="updated pa detailing on file to reflect drug approved by rph">
+  pa drug
+</option>
 
-  <option value="updated pa on file to reflect quantity approved by rph">
-    quantity update
-  </option>
+<option value="updated pa on file to reflect quantity approved by rph">
+  quantity update
+</option>
 
-  <option value="updated from pens to syringes per member request">
-    pens → syringes mbr
-  </option>
+<option value="updated from pens to syringes per member request">
+  pens → syringes mbr
+</option>
 
-  <option value="updated from pens to syringes per doctor's request">
-    pens → syringes dr
-  </option>
+<option value="updated from pens to syringes per doctor's request">
+  pens → syringes dr
+</option>
 
-  <option value="updated from syringes to pens per member request">
-    syringes → pens mbr
-  </option>
+<option value="updated from syringes to pens per member request">
+  syringes → pens mbr
+</option>
 
-  <option value="updated from syringes to pens per doctor's request">
-    syringes → pens dr
-  </option>
+<option value="updated from syringes to pens per doctor's request">
+  syringes → pens dr
+</option>
 
-  <option value="updated from multidose bottle to single-use vials per mdo request">
-    multidose → vials
-  </option>
+<option value="updated from multidose bottle to single-use vials per mdo request">
+  multidose → vials
+</option>
 
-  <option value="updated pa detailing on file for high dollar on approved medication">
-    high dollar
-  </option>
+<option value="updated pa detailing on file for high dollar on approved medication">
+  high dollar
+</option>
 
-  <option value="transferred from previous account same type of plan and um review">
-    same plan transfer
-  </option>
+<option value="transferred from previous account same type of plan and um review">
+  same plan transfer
+</option>
 
-  <option value="pa cannot be transferred // new pa required">
-    pa not transferable
-  </option>
+<option value="pa cannot be transferred // new pa required">
+  pa not transferable
+</option>
 
-  <option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">
-    extended loading
-  </option>
+<option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">
+  extended loading
+</option>
 
-  <option value="backdated to mm/dd/yyyy per mdo request">
-    backdated
-  </option>
+<option value="backdated to mm/dd/yyyy per mdo request">
+  backdated
+</option>
 
-  <option value="added pa as it was not added when case was approved">
-    missing pa
-  </option>
+<option value="added pa as it was not added when case was approved">
+  missing pa
+</option>
 
-  <option value="updated rx restrictions and claims paid">
-    rx restrictions
-  </option>
+<option value="updated rx restrictions and claims paid">
+  rx restrictions
+</option>
 
-  <option value="called to go over denial // reviewed next steps">
-    denial call
-  </option>
+<option value="called to go over denial // reviewed next steps">
+  denial call
+</option>
 
-  <option value="called to go over approval // provided approval information">
-    approval call
-  </option>
+<option value="called to go over approval // provided approval information">
+  approval call
+</option>
 
-  <option value="advised clinical review cannot assist // referred to ssa">
-    ssa redirect
-  </option>
+<option value="advised clinical review cannot assist // referred to ssa">
+  ssa redirect
+</option>
 
-  <option value="xfer to correct lob">
-    xfer
-  </option>
+<option value="xfer to correct lob">
+  xfer
+</option>
 
 </select>
 
@@ -273,8 +335,10 @@ button:hover{
 
 </div>
 
-<!-- PROVIDER -->
-<div id="provider" class="section">
+<div
+  id="provider"
+  class="section"
+>
 
 <label>name</label>
 <input id="p_name">
@@ -295,6 +359,7 @@ button:hover{
 <input id="p_mbr_pa">
 
 <label>rx</label>
+
 <input
   id="p_rx"
   oninput="updateProviderResolution()"
@@ -307,17 +372,17 @@ button:hover{
   onchange="providerPick(this.value)"
 >
 
-  <option value="">
-    -- select --
-  </option>
+<option value="">
+  -- select --
+</option>
 
-  <option value="verbal">
-    verbal pa request
-  </option>
+<option value="verbal">
+  verbal pa request
+</option>
 
-  <option value="xfer">
-    xfer
-  </option>
+<option value="xfer">
+  xfer
+</option>
 
 </select>
 
@@ -326,41 +391,41 @@ button:hover{
   class="transferFields"
 >
 
-  <label>xfer reason</label>
+<label>xfer reason</label>
 
-  <select
-    id="p_xfer_reason"
-    onchange="updateProviderResolution()"
-  >
+<select
+  id="p_xfer_reason"
+  onchange="updateProviderResolution()"
+>
 
-    <option value="">
-      -- select --
-    </option>
+<option value="">
+  -- select --
+</option>
 
-    <option value="pa">
-      pa
-    </option>
+<option value="pa">
+  pa
+</option>
 
-    <option value="appeal">
-      appeal
-    </option>
+<option value="appeal">
+  appeal
+</option>
 
-    <option value="request p2p">
-      request p2p
-    </option>
+<option value="request p2p">
+  request p2p
+</option>
 
-    <option value="go over denial">
-      go over denial
-    </option>
+<option value="go over denial">
+  go over denial
+</option>
 
-  </select>
+</select>
 
-  <label>xferred to</label>
+<label>xferred to</label>
 
-  <input
-    id="p_xfer_to"
-    oninput="updateProviderResolution()"
-  >
+<input
+  id="p_xfer_to"
+  oninput="updateProviderResolution()"
+>
 
 </div>
 
@@ -381,9 +446,11 @@ button:hover{
 
 </div>
 
-<div id="output" class="output"></div>
+<div
+  id="output"
+  class="output"
+></div>
 
-<!-- RESET ALWAYS VISIBLE BELOW OUTPUT/COPY -->
 <div class="resetArea">
 
   <button onclick="resetForm()">
@@ -392,14 +459,19 @@ button:hover{
 
 </div>
 
-<div id="saveStatus" class="status"></div>
+<div
+  id="saveStatus"
+  class="status"
+></div>
 
-<!-- ACTIVITY LOG -->
 <div class="logControls">
 
 <h3>activity log</h3>
 
-<div id="logCount" class="logCount">
+<div
+  id="logCount"
+  class="logCount"
+>
   0 saved entries
 </div>
 
@@ -430,279 +502,245 @@ button:hover{
 
 </div>
 
+</div>
+
 <script>
 
-let active="";
-let activityLog=[];
-let providerMode="provider";
+let active = "";
+let activityLog = [];
+let providerMode = "provider";
 
-/* CREATE UNIQUE LOG ID */
-function createLogId(){
-
+function createLogId() {
   return (
-    Date.now().toString()+
+    Date.now().toString() +
     Math.random().toString(16).slice(2)
   );
-
 }
 
-/* LOAD SAVED LOG */
-window.addEventListener("DOMContentLoaded",function(){
-
-  const savedLog=
-    localStorage.getItem("critterActivityLog");
-
-  if(savedLog){
-
-    try{
-
-      activityLog=JSON.parse(savedLog);
-
-    }catch(error){
-
-      activityLog=[];
-
+window.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    try {
+      activityLog =
+        JSON.parse(
+          localStorage.getItem(
+            "critterActivityLog"
+          )
+        ) || [];
+    } catch (error) {
+      activityLog = [];
     }
 
-  }
-
-  let logChanged=false;
-
-  activityLog.forEach(entry=>{
-
-    if(!entry.id){
-
-      entry.id=createLogId();
-      logChanged=true;
-
-    }
-
-  });
-
-  if(logChanged){
+    activityLog.forEach(function (entry) {
+      if (!entry.id) {
+        entry.id = createLogId();
+      }
+    });
 
     saveActivityLog();
-
+    updateLogCount();
   }
+);
 
-  updateLogCount();
-
-});
-
-/* SHOW SELECTED FORM */
-function showForm(type,element){
-
-  active=type;
+function showForm(type, element) {
+  active = type;
 
   document
     .querySelectorAll(".section")
-    .forEach(section=>{
-      section.style.display="none";
+    .forEach(function (section) {
+      section.style.display = "none";
     });
 
   document
     .getElementById(type)
-    .style.display="block";
+    .style.display = "block";
 
   document
     .querySelectorAll(".topRow input")
-    .forEach(checkbox=>{
-      checkbox.checked=false;
+    .forEach(function (checkbox) {
+      checkbox.checked = false;
     });
 
-  element.checked=true;
-
+  element.checked = true;
 }
 
-/* CRIT QUICK SELECT */
-function addCrit(value){
+function addCrit(value) {
+  if (!value) {
+    return;
+  }
 
-  if(!value) return;
-
-  const resolution=
+  const resolution =
     document.getElementById("c_res");
 
-  resolution.value=
+  resolution.value =
     resolution.value
-      ? resolution.value+" // "+value
+      ? resolution.value + " // " + value
       : value;
-
 }
 
-/* PROVIDER QUICK SELECT */
-function providerPick(value){
-
-  const transferFields=
+function providerPick(value) {
+  const transferFields =
     document.getElementById(
       "providerTransferFields"
     );
 
-  const resolution=
+  const resolution =
     document.getElementById("p_res");
 
-  if(value==="verbal"){
+  if (value === "verbal") {
+    providerMode = "provider";
 
-    providerMode="provider";
-
-    transferFields.style.display="none";
+    transferFields.style.display = "none";
 
     document
       .getElementById("p_xfer_reason")
-      .selectedIndex=0;
+      .selectedIndex = 0;
 
     document
       .getElementById("p_xfer_to")
-      .value="";
+      .value = "";
 
-    const rx=
-      document.getElementById("p_rx").value.trim();
+    const rx =
+      document
+        .getElementById("p_rx")
+        .value
+        .trim();
 
-    resolution.value=
+    resolution.value =
       `called to request a verbal pa for ${rx} // pega intake #`;
+  } else if (value === "xfer") {
+    providerMode = "xfer";
 
-  }else if(value==="xfer"){
-
-    providerMode="xfer";
-
-    transferFields.style.display="block";
+    transferFields.style.display = "block";
 
     updateProviderResolution();
+  } else {
+    providerMode = "provider";
 
-  }else{
-
-    providerMode="provider";
-
-    transferFields.style.display="none";
-
+    transferFields.style.display = "none";
   }
-
 }
 
-/* UPDATE PROVIDER RESOLUTION */
-function updateProviderResolution(){
-
-  const resolution=
+function updateProviderResolution() {
+  const resolution =
     document.getElementById("p_res");
 
-  const rx=
-    document.getElementById("p_rx").value.trim();
+  const rx =
+    document
+      .getElementById("p_rx")
+      .value
+      .trim();
 
-  const reason=
-    document.getElementById("p_xfer_reason").value;
+  const reason =
+    document
+      .getElementById("p_xfer_reason")
+      .value;
 
-  const transferredTo=
-    document.getElementById("p_xfer_to").value.trim();
+  const transferredTo =
+    document
+      .getElementById("p_xfer_to")
+      .value
+      .trim();
 
-  if(providerMode==="provider"){
-
-    if(resolution.value.includes("verbal pa")){
-
-      resolution.value=
-        `called to request a verbal pa for ${rx} // pega intake #`;
-
-    }
-
+  if (
+    providerMode === "provider" &&
+    resolution.value.includes("verbal pa")
+  ) {
+    resolution.value =
+      `called to request a verbal pa for ${rx} // pega intake #`;
   }
 
-  if(providerMode==="xfer"){
-
-    resolution.value=
+  if (providerMode === "xfer") {
+    resolution.value =
       `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
-
   }
-
 }
 
-/* CREATE DATE AND TIME */
-function getDateTime(){
-
+function getDateTime() {
   return new Date().toLocaleString();
-
 }
 
-/* CREATE NOTE AND SAVE LOG */
-function generate(){
+function getValue(id) {
+  return document
+    .getElementById(id)
+    .value
+    .trim();
+}
 
-  let fullOutput="";
-  let logEntry=null;
-
-  if(!active){
-
+function generate() {
+  if (!active) {
     document
       .getElementById("output")
-      .innerHTML=
+      .innerHTML =
         "<p style='text-align:center;'>please select a form first.</p>";
 
     return;
-
   }
 
-  /* CRIT */
-  if(active==="crit"){
+  let fullOutput = "";
+  let logEntry = null;
 
-    const agentId=
-      document.getElementById("c_id").value.trim();
+  if (active === "crit") {
+    const agentId =
+      getValue("c_id");
 
-    const memberPa=
-      document.getElementById("c_mbr_pa").value.trim();
+    const memberPa =
+      getValue("c_mbr_pa");
 
-    const rx=
-      document.getElementById("c_rx").value.trim();
+    const rx =
+      getValue("c_rx");
 
-    const resolution=
-      document.getElementById("c_res").value.trim();
+    const resolution =
+      getValue("c_res");
 
-    fullOutput=
+    fullOutput =
       `${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
 
-    logEntry={
-      id:createLogId(),
-      dateTime:getDateTime(),
-      type:"crit",
-      agentId:agentId,
-      memberPa:memberPa,
-      actionResolution:resolution
+    logEntry = {
+      id: createLogId(),
+      dateTime: getDateTime(),
+      type: "crit",
+      agentId: agentId,
+      memberPa: memberPa,
+      actionResolution: resolution
     };
-
   }
 
-  /* PROVIDER OR XFER */
-  if(active==="provider"){
+  if (active === "provider") {
+    const name =
+      getValue("p_name");
 
-    const name=
-      document.getElementById("p_name").value.trim();
+    const title =
+      getValue("p_title");
 
-    const title=
-      document.getElementById("p_title").value.trim();
+    const memberPa =
+      getValue("p_mbr_pa");
 
-    const memberPa=
-      document.getElementById("p_mbr_pa").value.trim();
+    const rx =
+      getValue("p_rx");
 
-    const rx=
-      document.getElementById("p_rx").value.trim();
+    const resolution =
+      getValue("p_res");
 
-    const resolution=
-      document.getElementById("p_res").value.trim();
-
-    fullOutput=
+    fullOutput =
       `${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
 
-    logEntry={
-      id:createLogId(),
-      dateTime:getDateTime(),
-      type:providerMode==="xfer"
-        ? "xfer"
-        : "provider",
-      agentId:name,
-      memberPa:memberPa,
-      actionResolution:resolution
+    logEntry = {
+      id: createLogId(),
+      dateTime: getDateTime(),
+      type:
+        providerMode === "xfer"
+          ? "xfer"
+          : "provider",
+      agentId: name,
+      memberPa: memberPa,
+      actionResolution: resolution
     };
-
   }
 
   document
     .getElementById("output")
-    .innerHTML=`
+    .innerHTML = `
       <textarea
         id="generatedText"
         readonly
@@ -710,313 +748,314 @@ function generate(){
       ></textarea>
 
       <div class="buttons">
+
         <button onclick="copyOutput()">
           copy
         </button>
+
       </div>
     `;
 
   document
     .getElementById("generatedText")
-    .value=fullOutput;
+    .value = fullOutput;
 
-  if(logEntry){
+  activityLog.unshift(logEntry);
 
-    activityLog.unshift(logEntry);
-
-    saveActivityLog();
-
-    updateLogCount();
-
-    showStatus("added");
-
-  }
-
+  saveActivityLog();
+  updateLogCount();
+  showStatus("added");
 }
 
-/* COPY CREATED NOTE */
-async function copyOutput(){
+async function copyOutput() {
+  const generatedText =
+    document.getElementById(
+      "generatedText"
+    );
 
-  const generatedText=
-    document.getElementById("generatedText");
+  if (!generatedText) {
+    return;
+  }
 
-  if(!generatedText) return;
-
-  try{
-
+  try {
     await navigator.clipboard.writeText(
       generatedText.value
     );
-
-    showStatus("note copied");
-
-  }catch(error){
-
+  } catch (error) {
     generatedText.select();
 
     document.execCommand("copy");
-
-    showStatus("note copied");
-
   }
 
+  showStatus("note copied");
 }
 
-/* STATUS MESSAGE */
-function showStatus(message,isError=false){
+function showStatus(
+  message,
+  isError = false
+) {
+  const status =
+    document.getElementById(
+      "saveStatus"
+    );
 
-  const status=
-    document.getElementById("saveStatus");
+  status.textContent = message;
 
-  status.textContent=message;
-
-  status.style.color=
+  status.style.color =
     isError
       ? "#ff8a8a"
       : "#8aff9d";
 
-  setTimeout(function(){
-
-    status.textContent="";
-
-  },3000);
-
+  setTimeout(
+    function () {
+      status.textContent = "";
+    },
+    3000
+  );
 }
 
-/* CLEAR CREATED OUTPUT */
-function clearOutput(){
-
+function clearOutput() {
   document
     .getElementById("output")
-    .innerHTML="";
+    .innerHTML = "";
 
   document
     .getElementById("saveStatus")
-    .textContent="";
-
+    .textContent = "";
 }
 
-/* RESET FORM */
-function resetForm(){
-
+function resetForm() {
   document
     .querySelectorAll(".section input")
-    .forEach(element=>{
-      element.value="";
+    .forEach(function (element) {
+      element.value = "";
     });
 
   document
     .querySelectorAll(".section textarea")
-    .forEach(element=>{
-      element.value="";
+    .forEach(function (element) {
+      element.value = "";
     });
 
   document
     .querySelectorAll(".section select")
-    .forEach(select=>{
-      select.selectedIndex=0;
+    .forEach(function (select) {
+      select.selectedIndex = 0;
     });
 
   document
     .querySelectorAll(".section")
-    .forEach(section=>{
-      section.style.display="none";
+    .forEach(function (section) {
+      section.style.display = "none";
     });
 
   document
     .querySelectorAll(".topRow input")
-    .forEach(checkbox=>{
-      checkbox.checked=false;
+    .forEach(function (checkbox) {
+      checkbox.checked = false;
     });
 
   document
-    .getElementById("providerTransferFields")
-    .style.display="none";
+    .getElementById(
+      "providerTransferFields"
+    )
+    .style.display = "none";
 
-  providerMode="provider";
+  providerMode = "provider";
+  active = "";
 
   clearOutput();
-
-  active="";
-
 }
 
-/* SAVE ACTIVITY LOG */
-function saveActivityLog(){
-
+function saveActivityLog() {
   localStorage.setItem(
     "critterActivityLog",
     JSON.stringify(activityLog)
   );
-
 }
 
-/* UPDATE ENTRY COUNT */
-function updateLogCount(){
-
-  const count=activityLog.length;
+function updateLogCount() {
+  const count =
+    activityLog.length;
 
   document
     .getElementById("logCount")
-    .textContent=
-      count===1
+    .textContent =
+      count === 1
         ? "1 saved entry"
         : `${count} saved entries`;
-
 }
 
-/* DELETE ONE ACTIVITY LOG ENTRY */
-function deleteLogEntry(entryId){
-
-  activityLog=
-    activityLog.filter(entry=>
-      entry.id!==entryId
+function deleteLogEntry(entryId) {
+  activityLog =
+    activityLog.filter(
+      function (entry) {
+        return entry.id !== entryId;
+      }
     );
 
   saveActivityLog();
-
   updateLogCount();
-
   showStatus("entry deleted");
-
 }
 
-/* VIEW ACTIVITY LOG */
-function showActivityLog(){
+function escapeHTML(value) {
+  const div =
+    document.createElement("div");
 
-  if(activityLog.length===0){
+  div.textContent =
+    value || "";
 
-    alert("there are no saved entries.");
+  return div.innerHTML;
+}
+
+function escapeJavaScript(value) {
+  return String(value || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'");
+}
+
+function showActivityLog() {
+  if (activityLog.length === 0) {
+    alert(
+      "there are no saved entries."
+    );
 
     return;
-
   }
 
-  const logWindow=
+  const logWindow =
     window.open(
       "",
       "critterActivityLogWindow"
     );
 
-  if(!logWindow){
-
+  if (!logWindow) {
     alert(
       "please allow pop-ups to view the activity log."
     );
 
     return;
-
   }
 
-  let rows="";
+  let rows = "";
 
-  activityLog.forEach(entry=>{
+  activityLog.forEach(
+    function (entry) {
+      rows += `
+        <tr>
 
-    rows+=`
-      <tr data-entry-id="${escapeHTML(entry.id)}">
+          <td>
+            ${escapeHTML(entry.dateTime)}
+          </td>
 
-        <td>
-          ${escapeHTML(entry.dateTime)}
-        </td>
+          <td>
+            ${escapeHTML(entry.type)}
+          </td>
 
-        <td>
-          ${escapeHTML(entry.type)}
-        </td>
+          <td>
+            ${escapeHTML(entry.agentId)}
+          </td>
 
-        <td>
-          ${escapeHTML(entry.agentId)}
-        </td>
+          <td>
+            ${escapeHTML(entry.memberPa)}
+          </td>
 
-        <td>
-          ${escapeHTML(entry.memberPa)}
-        </td>
+          <td>
+            ${escapeHTML(entry.actionResolution)}
+          </td>
 
-        <td>
-          ${escapeHTML(entry.actionResolution)}
-        </td>
+          <td>
 
-        <td>
-          <button
-            class="deleteButton"
-            onclick="deleteEntry(
-              '${escapeJavaScript(entry.id)}',
-              this
-            )"
-          >
-            delete
-          </button>
-        </td>
+            <button
+              class="deleteButton"
+              onclick="
+                deleteEntry(
+                  '${escapeJavaScript(entry.id)}',
+                  this
+                )
+              "
+            >
+              delete
+            </button>
 
-      </tr>
-    `;
+          </td>
 
-  });
+        </tr>
+      `;
+    }
+  );
 
   logWindow.document.open();
 
   logWindow.document.write(`
     <!DOCTYPE html>
+
     <html>
 
     <head>
 
-      <title>critter activity log</title>
+      <title>
+        critter activity log
+      </title>
 
       <style>
 
-        body{
-          background:#000;
-          color:#fff;
-          font-family:"Century Gothic",sans-serif;
-          padding:20px;
+        body {
+          background: #000;
+          color: #fff;
+          font-family:
+            "Century Gothic",
+            sans-serif;
+          padding: 20px;
         }
 
-        h2{
-          text-align:center;
+        h2 {
+          text-align: center;
         }
 
-        table{
-          width:100%;
-          border-collapse:collapse;
+        table {
+          width: 100%;
+          border-collapse: collapse;
         }
 
         th,
-        td{
-          border:1px solid #555;
-          padding:10px;
-          text-align:left;
-          vertical-align:top;
+        td {
+          border: 1px solid #555;
+          padding: 10px;
+          text-align: left;
+          vertical-align: top;
         }
 
-        th{
-          background:#222;
+        th {
+          background: #222;
         }
 
-        td{
-          background:#111;
+        td {
+          background: #111;
         }
 
-        button{
-          padding:7px 12px;
-          border:none;
-          border-radius:6px;
-          cursor:pointer;
-          color:#fff;
+        button {
+          padding: 7px 12px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          color: #fff;
         }
 
-        .deleteButton{
-          background:#722;
+        .deleteButton {
+          background: #722;
         }
 
-        .deleteButton:hover{
-          background:#933;
+        .deleteButton:hover {
+          background: #933;
         }
 
-        .emptyMessage{
-          display:none;
-          text-align:center;
-          margin-top:20px;
-          color:#aaa;
+        .emptyMessage {
+          display: none;
+          text-align: center;
+          margin-top: 20px;
+          color: #aaa;
         }
 
       </style>
@@ -1032,12 +1071,14 @@ function showActivityLog(){
         <thead>
 
           <tr>
+
             <th>date/time</th>
             <th>type</th>
             <th>agt id</th>
             <th>mbr id/pa#</th>
             <th>action/res</th>
             <th>delete</th>
+
           </tr>
 
         </thead>
@@ -1057,49 +1098,54 @@ function showActivityLog(){
 
       <script>
 
-        function deleteEntry(entryId,button){
-
-          const confirmed=
+        function deleteEntry(
+          entryId,
+          button
+        ) {
+          const confirmed =
             confirm(
               "delete this activity log entry?"
             );
 
-          if(!confirmed) return;
-
-          if(
-            window.opener &&
-            !window.opener.closed
-          ){
-
-            window.opener
-              .deleteLogEntry(entryId);
-
+          if (!confirmed) {
+            return;
           }
 
-          const row=
+          if (
+            window.opener &&
+            !window.opener.closed
+          ) {
+            window.opener
+              .deleteLogEntry(entryId);
+          }
+
+          const row =
             button.closest("tr");
 
-          if(row){
+          if (row) {
             row.remove();
           }
 
-          const remainingRows=
+          const remainingRows =
             document.querySelectorAll(
               "#activityTable tbody tr"
             );
 
-          if(remainingRows.length===0){
+          if (
+            remainingRows.length === 0
+          ) {
+            document
+              .getElementById(
+                "activityTable"
+              )
+              .style.display = "none";
 
             document
-              .getElementById("activityTable")
-              .style.display="none";
-
-            document
-              .getElementById("emptyMessage")
-              .style.display="block";
-
+              .getElementById(
+                "emptyMessage"
+              )
+              .style.display = "block";
           }
-
         }
 
       <\/script>
@@ -1110,49 +1156,27 @@ function showActivityLog(){
   `);
 
   logWindow.document.close();
-
 }
 
-/* PROTECT DISPLAYED HTML */
-function escapeHTML(value){
-
-  const div=
-    document.createElement("div");
-
-  div.textContent=value || "";
-
-  return div.innerHTML;
-
-}
-
-/* PROTECT POPUP JAVASCRIPT VALUES */
-function escapeJavaScript(value){
-
-  return String(value || "")
-    .replace(/\\/g,"\\\\")
-    .replace(/'/g,"\\'");
-
-}
-
-/* CLEAR ENTIRE ACTIVITY LOG */
-function clearLog(){
-
-  if(activityLog.length===0){
-
-    alert("there are no saved entries.");
+function clearLog() {
+  if (activityLog.length === 0) {
+    alert(
+      "there are no saved entries."
+    );
 
     return;
-
   }
 
-  const confirmed=
+  const confirmed =
     confirm(
       "are you sure you want to clear the entire activity log?"
     );
 
-  if(!confirmed) return;
+  if (!confirmed) {
+    return;
+  }
 
-  activityLog=[];
+  activityLog = [];
 
   localStorage.removeItem(
     "critterActivityLog"
@@ -1160,24 +1184,29 @@ function clearLog(){
 
   updateLogCount();
 
-  showStatus("activity log cleared");
-
+  showStatus(
+    "activity log cleared"
+  );
 }
 
-/* DOWNLOAD CSV FOR EXCEL */
-function downloadCSV(){
+function csvEscape(value) {
+  const text =
+    String(value || "")
+      .replace(/"/g, '""');
 
-  if(activityLog.length===0){
+  return `"${text}"`;
+}
 
+function downloadCSV() {
+  if (activityLog.length === 0) {
     alert(
       "there are no saved entries to download."
     );
 
     return;
-
   }
 
-  const headers=[
+  const headers = [
     "Date/Time",
     "Type",
     "AGT ID",
@@ -1185,48 +1214,55 @@ function downloadCSV(){
     "Action/Res"
   ];
 
-  const rows=
-    activityLog.map(entry=>[
-      entry.dateTime,
-      entry.type,
-      entry.agentId,
-      entry.memberPa,
-      entry.actionResolution
-    ]);
-
-  const csvData=[
-    headers,
-    ...rows
-  ]
-  .map(row=>
-    row
-      .map(value=>csvEscape(value))
-      .join(",")
-  )
-  .join("\n");
-
-  const blob=
-    new Blob(
-      ["\uFEFF"+csvData],
-      {
-        type:"text/csv;charset=utf-8;"
+  const rows =
+    activityLog.map(
+      function (entry) {
+        return [
+          entry.dateTime,
+          entry.type,
+          entry.agentId,
+          entry.memberPa,
+          entry.actionResolution
+        ];
       }
     );
 
-  const link=
+  const csvData = [
+    headers,
+    ...rows
+  ]
+    .map(
+      function (row) {
+        return row
+          .map(csvEscape)
+          .join(",");
+      }
+    )
+    .join("\n");
+
+  const blob =
+    new Blob(
+      ["\uFEFF" + csvData],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+  const link =
     document.createElement("a");
 
-  const url=
+  const url =
     URL.createObjectURL(blob);
 
-  const today=
+  const today =
     new Date()
       .toISOString()
       .split("T")[0];
 
-  link.href=url;
+  link.href = url;
 
-  link.download=
+  link.download =
     `critter-activity-log-${today}.csv`;
 
   document.body.appendChild(link);
@@ -1237,19 +1273,9 @@ function downloadCSV(){
 
   URL.revokeObjectURL(url);
 
-  showStatus("excel csv downloaded");
-
-}
-
-/* FORMAT CSV VALUES */
-function csvEscape(value){
-
-  const text=
-    String(value || "")
-      .replace(/"/g,'""');
-
-  return `"${text}"`;
-
+  showStatus(
+    "excel csv downloaded"
+  );
 }
 
 </script>
