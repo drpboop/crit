@@ -1,1284 +1,1442 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+  <title>critter</title>
 
-<title>critter</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: "Century Gothic", sans-serif;
+    }
 
-* {
-  box-sizing: border-box;
-}
+    .site-nav {
+      background: #111;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-bottom: 1px solid #333;
+    }
 
-body {
-  margin: 0;
-  background: #000;
-  color: #fff;
-  font-family: "Century Gothic", sans-serif;
-}
+    .site-nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
 
-.site-nav {
-  background: #111;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  border-bottom: 1px solid #333;
-}
+    .site-nav a:hover,
+    .site-nav a.active {
+      background: #444;
+    }
 
-.site-nav a {
-  color: #fff;
-  text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-}
+    .page {
+      padding: 20px;
+    }
 
-.site-nav a:hover,
-.site-nav a.active {
-  background: #444;
-}
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background: #111;
+      border-radius: 10px;
+    }
 
-.page {
-  padding: 20px;
-}
+    h2,
+    h3 {
+      text-align: center;
+    }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  background: #111;
-  padding: 20px;
-  border-radius: 10px;
-}
+    .topRow {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
 
-h2,
-h3 {
-  text-align: center;
-}
+    .topRow label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-.topRow {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 15px;
-}
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      background: #222;
+      color: #fff;
+    }
 
-.topRow label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+    textarea {
+      min-height: 70px;
+    }
 
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: none;
-  border-radius: 6px;
-  background: #222;
-  color: #fff;
-}
+    label {
+      display: block;
+      margin-top: 10px;
+    }
 
-textarea {
-  min-height: 70px;
-}
+    .section {
+      display: none;
+    }
 
-label {
-  display: block;
-  margin-top: 10px;
-}
+    .buttons {
+      margin-top: 15px;
+      text-align: center;
+    }
 
-.section {
-  display: none;
-}
+    button {
+      padding: 8px 14px;
+      margin: 5px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
 
-.buttons {
-  text-align: center;
-  margin-top: 15px;
-}
+    button:hover {
+      background: #555;
+    }
 
-button {
-  padding: 8px 14px;
-  margin: 5px;
-  background: #444;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
+    .dangerButton {
+      background: #722;
+    }
 
-button:hover {
-  background: #555;
-}
+    .dangerButton:hover {
+      background: #933;
+    }
 
-.dangerButton {
-  background: #722;
-}
+    .output {
+      margin-top: 15px;
+    }
 
-.dangerButton:hover {
-  background: #933;
-}
+    .output textarea {
+      min-height: 100px;
+    }
 
-.output {
-  margin-top: 15px;
-}
+    .logControls {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #444;
+      text-align: center;
+    }
 
-.output textarea {
-  min-height: 100px;
-}
+    .logCount {
+      margin-bottom: 8px;
+      color: #aaa;
+      font-size: 14px;
+    }
 
-.logControls {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #444;
-  text-align: center;
-}
+    .status {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #8aff9d;
+      text-align: center;
+    }
 
-.logCount {
-  color: #aaa;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
+    .transferFields {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: #181818;
+    }
 
-.status {
-  text-align: center;
-  margin-top: 10px;
-  min-height: 20px;
-  color: #8aff9d;
-}
-
-.transferFields {
-  display: none;
-  margin-top: 15px;
-  padding: 12px;
-  border: 1px solid #333;
-  border-radius: 8px;
-  background: #181818;
-}
-
-.resetArea,
-.clearLogArea {
-  text-align: center;
-  margin-top: 10px;
-}
-
-</style>
+    .resetArea,
+    .clearLogArea {
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
 
-<nav class="site-nav">
+  <nav class="site-nav">
 
-  <a href="https://drpboop.github.io/home/">
-    home
-  </a>
+    <a href="https://drpboop.github.io/home/">
+      home
+    </a>
 
-  <a
-    class="active"
-    href="https://drpboop.github.io/crit/"
-  >
-    critter
-  </a>
-
-  <a href="https://drpboop.github.io/refill-lookback/">
-    refill lookback
-  </a>
-
-</nav>
-
-<div class="page">
-
-<div class="container">
-
-<h2>critter</h2>
-
-<div class="topRow">
-
-  <label>
-    <input
-      type="checkbox"
-      onclick="showForm('crit',this)"
+    <a
+      class="active"
+      href="https://drpboop.github.io/crit/"
     >
-    crit
-  </label>
-
-  <label>
-    <input
-      type="checkbox"
-      onclick="showForm('provider',this)"
-    >
-    provider
-  </label>
-
-</div>
+      critter
+    </a>
 
-<div
-  id="crit"
-  class="section"
->
-
-<label>agt id</label>
-<input id="c_id">
+    <a href="https://drpboop.github.io/refill-lookback/">
+      refill lookback
+    </a>
 
-<label>mbr id / pa#</label>
-<input id="c_mbr_pa">
+    <a href="https://drpboop.github.io/situational/">
+      situational
+    </a>
 
-<label>rx</label>
-<input id="c_rx">
+  </nav>
 
-<label>res</label>
+  <div class="page">
 
-<select
-  onchange="
-    addCrit(this.value);
-    this.selectedIndex=0;
-  "
->
+    <div class="container">
 
-<option value="">
-  -- select --
-</option>
+      <h2>critter</h2>
 
-<option value="updated pa detailing on file to reflect dating approved by rph">
-  pa dating
-</option>
+      <div class="topRow">
 
-<option value="updated pa detailing on file to reflect strength approved by rph">
-  pa strength
-</option>
+        <label>
+          <input
+            type="checkbox"
+            onclick="showForm('crit', this)"
+          >
+          crit
+        </label>
 
-<option value="updated pa detailing on file to reflect drug approved by rph">
-  pa drug
-</option>
+        <label>
+          <input
+            type="checkbox"
+            onclick="showForm('provider', this)"
+          >
+          provider
+        </label>
 
-<option value="updated pa on file to reflect quantity approved by rph">
-  quantity update
-</option>
+      </div>
 
-<option value="updated from pens to syringes per member request">
-  pens → syringes mbr
-</option>
+      <div
+        id="crit"
+        class="section"
+      >
 
-<option value="updated from pens to syringes per doctor's request">
-  pens → syringes dr
-</option>
+        <label>agt id</label>
+        <input id="c_id">
 
-<option value="updated from syringes to pens per member request">
-  syringes → pens mbr
-</option>
+        <label>mbr id / pa#</label>
+        <input id="c_mbr_pa">
 
-<option value="updated from syringes to pens per doctor's request">
-  syringes → pens dr
-</option>
+        <label>rx</label>
+        <input id="c_rx">
 
-<option value="updated from multidose bottle to single-use vials per mdo request">
-  multidose → vials
-</option>
+        <label>res</label>
 
-<option value="updated pa detailing on file for high dollar on approved medication">
-  high dollar
-</option>
+        <select
+          onchange="
+            addCrit(this.value);
+            this.selectedIndex = 0;
+          "
+        >
 
-<option value="transferred from previous account same type of plan and um review">
-  same plan transfer
-</option>
+          <option value="">
+            -- select --
+          </option>
 
-<option value="pa cannot be transferred // new pa required">
-  pa not transferable
-</option>
+          <option value="updated pa detailing on file to reflect dating approved by rph">
+            pa dating
+          </option>
 
-<option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">
-  extended loading
-</option>
+          <option value="updated pa detailing on file to reflect strength approved by rph">
+            pa strength
+          </option>
 
-<option value="backdated to mm/dd/yyyy per mdo request">
-  backdated
-</option>
+          <option value="updated pa detailing on file to reflect drug approved by rph">
+            pa drug
+          </option>
 
-<option value="added pa as it was not added when case was approved">
-  missing pa
-</option>
+          <option value="updated pa on file to reflect quantity approved by rph">
+            quantity update
+          </option>
 
-<option value="updated rx restrictions and claims paid">
-  rx restrictions
-</option>
+          <option value="updated from pens to syringes per member request">
+            pens → syringes mbr
+          </option>
 
-<option value="called to go over denial // reviewed next steps">
-  denial call
-</option>
+          <option value="updated from pens to syringes per doctor's request">
+            pens → syringes dr
+          </option>
 
-<option value="called to go over approval // provided approval information">
-  approval call
-</option>
+          <option value="updated from syringes to pens per member request">
+            syringes → pens mbr
+          </option>
 
-<option value="advised clinical review cannot assist // referred to ssa">
-  ssa redirect
-</option>
+          <option value="updated from syringes to pens per doctor's request">
+            syringes → pens dr
+          </option>
 
-<option value="xfer to correct lob">
-  xfer
-</option>
+          <option value="updated from multidose bottle to single-use vials per mdo request">
+            multidose → vials
+          </option>
 
-</select>
+          <option value="updated pa detailing on file for high dollar on approved medication">
+            high dollar
+          </option>
 
-<label>resolution</label>
-<textarea id="c_res"></textarea>
+          <option value="transferred from previous account same type of plan and um review">
+            same plan transfer
+          </option>
 
-</div>
+          <option value="pa cannot be transferred // new pa required">
+            pa not transferable
+          </option>
 
-<div
-  id="provider"
-  class="section"
->
+          <option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">
+            extended loading
+          </option>
 
-<label>name</label>
-<input id="p_name">
+          <option value="backdated to mm/dd/yyyy per mdo request">
+            backdated
+          </option>
 
-<label>job title</label>
-<input id="p_title">
+          <option value="added pa as it was not added when case was approved">
+            missing pa
+          </option>
 
-<label>npi#</label>
-<input id="p_npi">
+          <option value="updated rx restrictions and claims paid">
+            rx restrictions
+          </option>
 
-<label>cb#</label>
-<input id="p_cb">
+          <option value="called to go over denial // reviewed next steps">
+            denial call
+          </option>
 
-<label>fax#</label>
-<input id="p_fax">
+          <option value="called to go over approval // provided approval information">
+            approval call
+          </option>
 
-<label>mbr id / pa#</label>
-<input id="p_mbr_pa">
+          <option value="advised clinical review cannot assist // referred to ssa">
+            ssa redirect
+          </option>
 
-<label>rx</label>
+          <option value="xfer to correct lob">
+            xfer
+          </option>
 
-<input
-  id="p_rx"
-  oninput="updateProviderResolution()"
->
+        </select>
 
-<label>res</label>
+        <label>resolution</label>
+        <textarea id="c_res"></textarea>
 
-<select
-  id="p_quick_select"
-  onchange="providerPick(this.value)"
->
+      </div>
 
-<option value="">
-  -- select --
-</option>
+      <div
+        id="provider"
+        class="section"
+      >
 
-<option value="verbal">
-  verbal pa request
-</option>
+        <label>name</label>
+        <input id="p_name">
 
-<option value="xfer">
-  xfer
-</option>
+        <label>job title</label>
+        <input id="p_title">
 
-</select>
+        <label>npi#</label>
+        <input id="p_npi">
 
-<div
-  id="providerTransferFields"
-  class="transferFields"
->
+        <label>cb#</label>
+        <input id="p_cb">
 
-<label>xfer reason</label>
+        <label>fax#</label>
+        <input id="p_fax">
 
-<select
-  id="p_xfer_reason"
-  onchange="updateProviderResolution()"
->
+        <label>mbr id / pa#</label>
+        <input id="p_mbr_pa">
 
-<option value="">
-  -- select --
-</option>
+        <label>rx</label>
 
-<option value="pa">
-  pa
-</option>
+        <input
+          id="p_rx"
+          oninput="updateProviderResolution()"
+        >
 
-<option value="appeal">
-  appeal
-</option>
+        <label>res</label>
 
-<option value="request p2p">
-  request p2p
-</option>
+        <select
+          id="p_quick_select"
+          onchange="providerPick(this.value)"
+        >
 
-<option value="go over denial">
-  go over denial
-</option>
+          <option value="">
+            -- select --
+          </option>
 
-</select>
+          <option value="verbal">
+            verbal pa request
+          </option>
 
-<label>xferred to</label>
+          <option value="xfer">
+            xfer
+          </option>
 
-<input
-  id="p_xfer_to"
-  oninput="updateProviderResolution()"
->
+        </select>
 
-</div>
+        <div
+          id="providerTransferFields"
+          class="transferFields"
+        >
 
-<label>resolution</label>
-<textarea id="p_res"></textarea>
+          <label>xfer reason</label>
 
-</div>
+          <select
+            id="p_xfer_reason"
+            onchange="updateProviderResolution()"
+          >
 
-<div class="buttons">
+            <option value="">
+              -- select --
+            </option>
 
-  <button onclick="generate()">
-    create
-  </button>
+            <option value="pa">
+              pa
+            </option>
 
-  <button onclick="clearOutput()">
-    clear
-  </button>
+            <option value="appeal">
+              appeal
+            </option>
 
-</div>
+            <option value="request p2p">
+              request p2p
+            </option>
 
-<div
-  id="output"
-  class="output"
-></div>
+            <option value="go over denial">
+              go over denial
+            </option>
 
-<div class="resetArea">
+          </select>
 
-  <button onclick="resetForm()">
-    reset
-  </button>
+          <label>xferred to</label>
 
-</div>
+          <input
+            id="p_xfer_to"
+            oninput="updateProviderResolution()"
+          >
 
-<div
-  id="saveStatus"
-  class="status"
-></div>
+        </div>
 
-<div class="logControls">
+        <label>resolution</label>
+        <textarea id="p_res"></textarea>
 
-<h3>activity log</h3>
-
-<div
-  id="logCount"
-  class="logCount"
->
-  0 saved entries
-</div>
-
-<div class="buttons">
-
-  <button onclick="downloadCSV()">
-    pop
-  </button>
-
-  <button onclick="showActivityLog()">
-    view
-  </button>
-
-</div>
-
-<div class="clearLogArea">
-
-  <button
-    class="dangerButton"
-    onclick="clearLog()"
-  >
-    clear log
-  </button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-let active = "";
-let activityLog = [];
-let providerMode = "provider";
-
-function createLogId() {
-  return (
-    Date.now().toString() +
-    Math.random().toString(16).slice(2)
-  );
-}
-
-window.addEventListener(
-  "DOMContentLoaded",
-  function () {
-    try {
-      activityLog =
-        JSON.parse(
-          localStorage.getItem(
-            "critterActivityLog"
-          )
-        ) || [];
-    } catch (error) {
-      activityLog = [];
-    }
-
-    activityLog.forEach(function (entry) {
-      if (!entry.id) {
-        entry.id = createLogId();
-      }
-    });
-
-    saveActivityLog();
-    updateLogCount();
-  }
-);
-
-function showForm(type, element) {
-  active = type;
-
-  document
-    .querySelectorAll(".section")
-    .forEach(function (section) {
-      section.style.display = "none";
-    });
-
-  document
-    .getElementById(type)
-    .style.display = "block";
-
-  document
-    .querySelectorAll(".topRow input")
-    .forEach(function (checkbox) {
-      checkbox.checked = false;
-    });
-
-  element.checked = true;
-}
-
-function addCrit(value) {
-  if (!value) {
-    return;
-  }
-
-  const resolution =
-    document.getElementById("c_res");
-
-  resolution.value =
-    resolution.value
-      ? resolution.value + " // " + value
-      : value;
-}
-
-function providerPick(value) {
-  const transferFields =
-    document.getElementById(
-      "providerTransferFields"
-    );
-
-  const resolution =
-    document.getElementById("p_res");
-
-  if (value === "verbal") {
-    providerMode = "provider";
-
-    transferFields.style.display = "none";
-
-    document
-      .getElementById("p_xfer_reason")
-      .selectedIndex = 0;
-
-    document
-      .getElementById("p_xfer_to")
-      .value = "";
-
-    const rx =
-      document
-        .getElementById("p_rx")
-        .value
-        .trim();
-
-    resolution.value =
-      `called to request a verbal pa for ${rx} // pega intake #`;
-  } else if (value === "xfer") {
-    providerMode = "xfer";
-
-    transferFields.style.display = "block";
-
-    updateProviderResolution();
-  } else {
-    providerMode = "provider";
-
-    transferFields.style.display = "none";
-  }
-}
-
-function updateProviderResolution() {
-  const resolution =
-    document.getElementById("p_res");
-
-  const rx =
-    document
-      .getElementById("p_rx")
-      .value
-      .trim();
-
-  const reason =
-    document
-      .getElementById("p_xfer_reason")
-      .value;
-
-  const transferredTo =
-    document
-      .getElementById("p_xfer_to")
-      .value
-      .trim();
-
-  if (
-    providerMode === "provider" &&
-    resolution.value.includes("verbal pa")
-  ) {
-    resolution.value =
-      `called to request a verbal pa for ${rx} // pega intake #`;
-  }
-
-  if (providerMode === "xfer") {
-    resolution.value =
-      `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
-  }
-}
-
-function getDateTime() {
-  return new Date().toLocaleString();
-}
-
-function getValue(id) {
-  return document
-    .getElementById(id)
-    .value
-    .trim();
-}
-
-function generate() {
-  if (!active) {
-    document
-      .getElementById("output")
-      .innerHTML =
-        "<p style='text-align:center;'>please select a form first.</p>";
-
-    return;
-  }
-
-  let fullOutput = "";
-  let logEntry = null;
-
-  if (active === "crit") {
-    const agentId =
-      getValue("c_id");
-
-    const memberPa =
-      getValue("c_mbr_pa");
-
-    const rx =
-      getValue("c_rx");
-
-    const resolution =
-      getValue("c_res");
-
-    fullOutput =
-      `${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
-
-    logEntry = {
-      id: createLogId(),
-      dateTime: getDateTime(),
-      type: "crit",
-      agentId: agentId,
-      memberPa: memberPa,
-      actionResolution: resolution
-    };
-  }
-
-  if (active === "provider") {
-    const name =
-      getValue("p_name");
-
-    const title =
-      getValue("p_title");
-
-    const memberPa =
-      getValue("p_mbr_pa");
-
-    const rx =
-      getValue("p_rx");
-
-    const resolution =
-      getValue("p_res");
-
-    fullOutput =
-      `${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
-
-    logEntry = {
-      id: createLogId(),
-      dateTime: getDateTime(),
-      type:
-        providerMode === "xfer"
-          ? "xfer"
-          : "provider",
-      agentId: name,
-      memberPa: memberPa,
-      actionResolution: resolution
-    };
-  }
-
-  document
-    .getElementById("output")
-    .innerHTML = `
-      <textarea
-        id="generatedText"
-        readonly
-        onclick="this.select()"
-      ></textarea>
+      </div>
 
       <div class="buttons">
 
-        <button onclick="copyOutput()">
-          copy
+        <button onclick="generate()">
+          create
+        </button>
+
+        <button onclick="clearOutput()">
+          clear
         </button>
 
       </div>
-    `;
-
-  document
-    .getElementById("generatedText")
-    .value = fullOutput;
-
-  activityLog.unshift(logEntry);
-
-  saveActivityLog();
-  updateLogCount();
-  showStatus("added");
-}
-
-async function copyOutput() {
-  const generatedText =
-    document.getElementById(
-      "generatedText"
-    );
-
-  if (!generatedText) {
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(
-      generatedText.value
-    );
-  } catch (error) {
-    generatedText.select();
-
-    document.execCommand("copy");
-  }
-
-  showStatus("note copied");
-}
-
-function showStatus(
-  message,
-  isError = false
-) {
-  const status =
-    document.getElementById(
-      "saveStatus"
-    );
-
-  status.textContent = message;
-
-  status.style.color =
-    isError
-      ? "#ff8a8a"
-      : "#8aff9d";
-
-  setTimeout(
-    function () {
-      status.textContent = "";
-    },
-    3000
-  );
-}
-
-function clearOutput() {
-  document
-    .getElementById("output")
-    .innerHTML = "";
-
-  document
-    .getElementById("saveStatus")
-    .textContent = "";
-}
-
-function resetForm() {
-  document
-    .querySelectorAll(".section input")
-    .forEach(function (element) {
-      element.value = "";
-    });
-
-  document
-    .querySelectorAll(".section textarea")
-    .forEach(function (element) {
-      element.value = "";
-    });
-
-  document
-    .querySelectorAll(".section select")
-    .forEach(function (select) {
-      select.selectedIndex = 0;
-    });
-
-  document
-    .querySelectorAll(".section")
-    .forEach(function (section) {
-      section.style.display = "none";
-    });
-
-  document
-    .querySelectorAll(".topRow input")
-    .forEach(function (checkbox) {
-      checkbox.checked = false;
-    });
-
-  document
-    .getElementById(
-      "providerTransferFields"
-    )
-    .style.display = "none";
-
-  providerMode = "provider";
-  active = "";
-
-  clearOutput();
-}
-
-function saveActivityLog() {
-  localStorage.setItem(
-    "critterActivityLog",
-    JSON.stringify(activityLog)
-  );
-}
-
-function updateLogCount() {
-  const count =
-    activityLog.length;
-
-  document
-    .getElementById("logCount")
-    .textContent =
-      count === 1
-        ? "1 saved entry"
-        : `${count} saved entries`;
-}
-
-function deleteLogEntry(entryId) {
-  activityLog =
-    activityLog.filter(
-      function (entry) {
-        return entry.id !== entryId;
-      }
-    );
-
-  saveActivityLog();
-  updateLogCount();
-  showStatus("entry deleted");
-}
-
-function escapeHTML(value) {
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    value || "";
-
-  return div.innerHTML;
-}
-
-function escapeJavaScript(value) {
-  return String(value || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'");
-}
-
-function showActivityLog() {
-  if (activityLog.length === 0) {
-    alert(
-      "there are no saved entries."
-    );
-
-    return;
-  }
-
-  const logWindow =
-    window.open(
-      "",
-      "critterActivityLogWindow"
-    );
-
-  if (!logWindow) {
-    alert(
-      "please allow pop-ups to view the activity log."
-    );
-
-    return;
-  }
-
-  let rows = "";
-
-  activityLog.forEach(
-    function (entry) {
-      rows += `
-        <tr>
-
-          <td>
-            ${escapeHTML(entry.dateTime)}
-          </td>
-
-          <td>
-            ${escapeHTML(entry.type)}
-          </td>
-
-          <td>
-            ${escapeHTML(entry.agentId)}
-          </td>
-
-          <td>
-            ${escapeHTML(entry.memberPa)}
-          </td>
-
-          <td>
-            ${escapeHTML(entry.actionResolution)}
-          </td>
-
-          <td>
-
-            <button
-              class="deleteButton"
-              onclick="
-                deleteEntry(
-                  '${escapeJavaScript(entry.id)}',
-                  this
-                )
-              "
-            >
-              delete
-            </button>
-
-          </td>
-
-        </tr>
-      `;
-    }
-  );
-
-  logWindow.document.open();
-
-  logWindow.document.write(`
-    <!DOCTYPE html>
-
-    <html>
-
-    <head>
-
-      <title>
-        critter activity log
-      </title>
-
-      <style>
-
-        body {
-          background: #000;
-          color: #fff;
-          font-family:
-            "Century Gothic",
-            sans-serif;
-          padding: 20px;
-        }
-
-        h2 {
-          text-align: center;
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        th,
-        td {
-          border: 1px solid #555;
-          padding: 10px;
-          text-align: left;
-          vertical-align: top;
-        }
-
-        th {
-          background: #222;
-        }
-
-        td {
-          background: #111;
-        }
-
-        button {
-          padding: 7px 12px;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          color: #fff;
-        }
-
-        .deleteButton {
-          background: #722;
-        }
-
-        .deleteButton:hover {
-          background: #933;
-        }
-
-        .emptyMessage {
-          display: none;
-          text-align: center;
-          margin-top: 20px;
-          color: #aaa;
-        }
-
-      </style>
-
-    </head>
-
-    <body>
-
-      <h2>activity log</h2>
-
-      <table id="activityTable">
-
-        <thead>
-
-          <tr>
-
-            <th>date/time</th>
-            <th>type</th>
-            <th>agt id</th>
-            <th>mbr id/pa#</th>
-            <th>action/res</th>
-            <th>delete</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-          ${rows}
-        </tbody>
-
-      </table>
 
       <div
-        id="emptyMessage"
-        class="emptyMessage"
-      >
-        no saved entries
+        id="output"
+        class="output"
+      ></div>
+
+      <div class="resetArea">
+
+        <button onclick="resetForm()">
+          reset
+        </button>
+
       </div>
 
-      <script>
+      <div
+        id="saveStatus"
+        class="status"
+      ></div>
 
-        function deleteEntry(
-          entryId,
-          button
-        ) {
-          const confirmed =
-            confirm(
-              "delete this activity log entry?"
-            );
+      <div class="logControls">
 
-          if (!confirmed) {
-            return;
-          }
+        <h3>activity log</h3>
 
-          if (
-            window.opener &&
-            !window.opener.closed
-          ) {
-            window.opener
-              .deleteLogEntry(entryId);
-          }
+        <div
+          id="logCount"
+          class="logCount"
+        >
+          0 saved entries
+        </div>
 
-          const row =
-            button.closest("tr");
+        <div class="buttons">
 
-          if (row) {
-            row.remove();
-          }
+          <button onclick="downloadCSV()">
+            pop
+          </button>
 
-          const remainingRows =
-            document.querySelectorAll(
-              "#activityTable tbody tr"
-            );
+          <button onclick="showActivityLog()">
+            view
+          </button>
 
-          if (
-            remainingRows.length === 0
-          ) {
-            document
-              .getElementById(
-                "activityTable"
-              )
-              .style.display = "none";
+        </div>
 
-            document
-              .getElementById(
-                "emptyMessage"
-              )
-              .style.display = "block";
+        <div class="clearLogArea">
+
+          <button
+            class="dangerButton"
+            onclick="clearLog()"
+          >
+            clear log
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let active = "";
+    let activityLog = [];
+    let providerMode = "provider";
+
+    function createLogId() {
+      return (
+        Date.now().toString() +
+        Math.random()
+          .toString(16)
+          .slice(2)
+      );
+    }
+
+    window.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        const savedLog =
+          localStorage.getItem(
+            "critterActivityLog"
+          );
+
+        if (savedLog) {
+          try {
+            activityLog =
+              JSON.parse(savedLog);
+          } catch (error) {
+            activityLog = [];
           }
         }
 
-      <\/script>
+        let logChanged = false;
 
-    </body>
+        activityLog.forEach(
+          function (entry) {
+            if (!entry.id) {
+              entry.id =
+                createLogId();
 
-    </html>
-  `);
+              logChanged = true;
+            }
+          }
+        );
 
-  logWindow.document.close();
-}
+        if (logChanged) {
+          saveActivityLog();
+        }
 
-function clearLog() {
-  if (activityLog.length === 0) {
-    alert(
-      "there are no saved entries."
-    );
-
-    return;
-  }
-
-  const confirmed =
-    confirm(
-      "are you sure you want to clear the entire activity log?"
-    );
-
-  if (!confirmed) {
-    return;
-  }
-
-  activityLog = [];
-
-  localStorage.removeItem(
-    "critterActivityLog"
-  );
-
-  updateLogCount();
-
-  showStatus(
-    "activity log cleared"
-  );
-}
-
-function csvEscape(value) {
-  const text =
-    String(value || "")
-      .replace(/"/g, '""');
-
-  return `"${text}"`;
-}
-
-function downloadCSV() {
-  if (activityLog.length === 0) {
-    alert(
-      "there are no saved entries to download."
-    );
-
-    return;
-  }
-
-  const headers = [
-    "Date/Time",
-    "Type",
-    "AGT ID",
-    "MBR ID/PA#",
-    "Action/Res"
-  ];
-
-  const rows =
-    activityLog.map(
-      function (entry) {
-        return [
-          entry.dateTime,
-          entry.type,
-          entry.agentId,
-          entry.memberPa,
-          entry.actionResolution
-        ];
+        updateLogCount();
       }
     );
 
-  const csvData = [
-    headers,
-    ...rows
-  ]
-    .map(
-      function (row) {
-        return row
-          .map(csvEscape)
-          .join(",");
+    function showForm(
+      type,
+      element
+    ) {
+      active = type;
+
+      document
+        .querySelectorAll(".section")
+        .forEach(
+          function (section) {
+            section.style.display =
+              "none";
+          }
+        );
+
+      document
+        .getElementById(type)
+        .style.display = "block";
+
+      document
+        .querySelectorAll(
+          ".topRow input"
+        )
+        .forEach(
+          function (checkbox) {
+            checkbox.checked = false;
+          }
+        );
+
+      element.checked = true;
+    }
+
+    function addCrit(value) {
+      if (!value) {
+        return;
       }
-    )
-    .join("\n");
 
-  const blob =
-    new Blob(
-      ["\uFEFF" + csvData],
-      {
-        type:
-          "text/csv;charset=utf-8;"
+      const resolution =
+        document.getElementById(
+          "c_res"
+        );
+
+      resolution.value =
+        resolution.value
+          ? resolution.value +
+            " // " +
+            value
+          : value;
+    }
+
+    function providerPick(value) {
+      const transferFields =
+        document.getElementById(
+          "providerTransferFields"
+        );
+
+      const resolution =
+        document.getElementById(
+          "p_res"
+        );
+
+      if (value === "verbal") {
+        providerMode = "provider";
+
+        transferFields.style.display =
+          "none";
+
+        document
+          .getElementById(
+            "p_xfer_reason"
+          )
+          .selectedIndex = 0;
+
+        document
+          .getElementById(
+            "p_xfer_to"
+          )
+          .value = "";
+
+        const rx =
+          document
+            .getElementById("p_rx")
+            .value
+            .trim();
+
+        resolution.value =
+          `called to request a verbal pa for ${rx} // pega intake #`;
+      } else if (
+        value === "xfer"
+      ) {
+        providerMode = "xfer";
+
+        transferFields.style.display =
+          "block";
+
+        updateProviderResolution();
+      } else {
+        providerMode = "provider";
+
+        transferFields.style.display =
+          "none";
       }
-    );
+    }
 
-  const link =
-    document.createElement("a");
+    function updateProviderResolution() {
+      const resolution =
+        document.getElementById(
+          "p_res"
+        );
 
-  const url =
-    URL.createObjectURL(blob);
+      const rx =
+        document
+          .getElementById("p_rx")
+          .value
+          .trim();
 
-  const today =
-    new Date()
-      .toISOString()
-      .split("T")[0];
+      const reason =
+        document
+          .getElementById(
+            "p_xfer_reason"
+          )
+          .value;
 
-  link.href = url;
+      const transferredTo =
+        document
+          .getElementById(
+            "p_xfer_to"
+          )
+          .value
+          .trim();
 
-  link.download =
-    `critter-activity-log-${today}.csv`;
+      if (
+        providerMode === "provider" &&
+        resolution.value.includes(
+          "verbal pa"
+        )
+      ) {
+        resolution.value =
+          `called to request a verbal pa for ${rx} // pega intake #`;
+      }
 
-  document.body.appendChild(link);
+      if (
+        providerMode === "xfer"
+      ) {
+        resolution.value =
+          `called to check status on ${reason} // advised pa intake line // xferred to ${transferredTo}`;
+      }
+    }
 
-  link.click();
+    function getDateTime() {
+      return new Date()
+        .toLocaleString()
+        .toLowerCase();
+    }
 
-  document.body.removeChild(link);
+    function generate() {
+      let fullOutput = "";
+      let logEntry = null;
 
-  URL.revokeObjectURL(url);
+      if (!active) {
+        document
+          .getElementById("output")
+          .innerHTML =
+            "<p style='text-align:center;'>please select a form first.</p>";
 
-  showStatus(
-    "excel csv downloaded"
-  );
-}
+        return;
+      }
 
-</script>
+      if (active === "crit") {
+        const agentId =
+          document
+            .getElementById("c_id")
+            .value
+            .trim();
+
+        const memberPa =
+          document
+            .getElementById(
+              "c_mbr_pa"
+            )
+            .value
+            .trim();
+
+        const rx =
+          document
+            .getElementById("c_rx")
+            .value
+            .trim();
+
+        const resolution =
+          document
+            .getElementById("c_res")
+            .value
+            .trim();
+
+        fullOutput =
+          `${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+
+        logEntry = {
+          id: createLogId(),
+          dateTime: getDateTime(),
+          type: "crit",
+          agentId: agentId,
+          memberPa: memberPa,
+          actionResolution:
+            resolution
+        };
+      }
+
+      if (
+        active === "provider"
+      ) {
+        const name =
+          document
+            .getElementById("p_name")
+            .value
+            .trim();
+
+        const title =
+          document
+            .getElementById("p_title")
+            .value
+            .trim();
+
+        const memberPa =
+          document
+            .getElementById(
+              "p_mbr_pa"
+            )
+            .value
+            .trim();
+
+        const rx =
+          document
+            .getElementById("p_rx")
+            .value
+            .trim();
+
+        const resolution =
+          document
+            .getElementById("p_res")
+            .value
+            .trim();
+
+        fullOutput =
+          `${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
+
+        logEntry = {
+          id: createLogId(),
+          dateTime: getDateTime(),
+          type:
+            providerMode === "xfer"
+              ? "xfer"
+              : "provider",
+          agentId: name,
+          memberPa: memberPa,
+          actionResolution:
+            resolution
+        };
+      }
+
+      document
+        .getElementById("output")
+        .innerHTML = `
+          <textarea
+            id="generatedText"
+            readonly
+            onclick="this.select()"
+          ></textarea>
+
+          <div class="buttons">
+            <button onclick="copyOutput()">
+              copy
+            </button>
+          </div>
+        `;
+
+      document
+        .getElementById(
+          "generatedText"
+        )
+        .value = fullOutput;
+
+      if (logEntry) {
+        activityLog.unshift(
+          logEntry
+        );
+
+        saveActivityLog();
+        updateLogCount();
+        showStatus("added");
+      }
+    }
+
+    async function copyOutput() {
+      const generatedText =
+        document.getElementById(
+          "generatedText"
+        );
+
+      if (!generatedText) {
+        return;
+      }
+
+      try {
+        await navigator.clipboard
+          .writeText(
+            generatedText.value
+          );
+      } catch (error) {
+        generatedText.select();
+
+        document.execCommand(
+          "copy"
+        );
+      }
+
+      showStatus("note copied");
+    }
+
+    function showStatus(
+      message,
+      isError = false
+    ) {
+      const status =
+        document.getElementById(
+          "saveStatus"
+        );
+
+      status.textContent =
+        message;
+
+      status.style.color =
+        isError
+          ? "#ff8a8a"
+          : "#8aff9d";
+
+      setTimeout(
+        function () {
+          status.textContent = "";
+        },
+        3000
+      );
+    }
+
+    function clearOutput() {
+      document
+        .getElementById("output")
+        .innerHTML = "";
+
+      document
+        .getElementById(
+          "saveStatus"
+        )
+        .textContent = "";
+    }
+
+    function resetForm() {
+      document
+        .querySelectorAll(
+          ".section input"
+        )
+        .forEach(
+          function (element) {
+            element.value = "";
+          }
+        );
+
+      document
+        .querySelectorAll(
+          ".section textarea"
+        )
+        .forEach(
+          function (element) {
+            element.value = "";
+          }
+        );
+
+      document
+        .querySelectorAll(
+          ".section select"
+        )
+        .forEach(
+          function (select) {
+            select.selectedIndex = 0;
+          }
+        );
+
+      document
+        .querySelectorAll(".section")
+        .forEach(
+          function (section) {
+            section.style.display =
+              "none";
+          }
+        );
+
+      document
+        .querySelectorAll(
+          ".topRow input"
+        )
+        .forEach(
+          function (checkbox) {
+            checkbox.checked = false;
+          }
+        );
+
+      document
+        .getElementById(
+          "providerTransferFields"
+        )
+        .style.display = "none";
+
+      providerMode = "provider";
+      active = "";
+
+      clearOutput();
+    }
+
+    function saveActivityLog() {
+      localStorage.setItem(
+        "critterActivityLog",
+        JSON.stringify(
+          activityLog
+        )
+      );
+    }
+
+    function updateLogCount() {
+      const count =
+        activityLog.length;
+
+      document
+        .getElementById("logCount")
+        .textContent =
+          count === 1
+            ? "1 saved entry"
+            : `${count} saved entries`;
+    }
+
+    function deleteLogEntry(
+      entryId
+    ) {
+      activityLog =
+        activityLog.filter(
+          function (entry) {
+            return (
+              entry.id !== entryId
+            );
+          }
+        );
+
+      saveActivityLog();
+      updateLogCount();
+
+      showStatus(
+        "entry deleted"
+      );
+    }
+
+    function escapeHTML(value) {
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.textContent =
+        value || "";
+
+      return div.innerHTML;
+    }
+
+    function escapeJavaScript(
+      value
+    ) {
+      return String(
+        value || ""
+      )
+        .replace(
+          /\\/g,
+          "\\\\"
+        )
+        .replace(
+          /'/g,
+          "\\'"
+        );
+    }
+
+    function showActivityLog() {
+      if (
+        activityLog.length === 0
+      ) {
+        alert(
+          "there are no saved entries."
+        );
+
+        return;
+      }
+
+      const logWindow =
+        window.open(
+          "",
+          "critterActivityLogWindow"
+        );
+
+      if (!logWindow) {
+        alert(
+          "please allow pop-ups to view the activity log."
+        );
+
+        return;
+      }
+
+      let rows = "";
+
+      activityLog.forEach(
+        function (entry) {
+          rows += `
+            <tr>
+              <td>
+                ${escapeHTML(
+                  entry.dateTime
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  entry.type
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  entry.agentId
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  entry.memberPa
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  entry.actionResolution
+                )}
+              </td>
+
+              <td>
+                <button
+                  class="deleteButton"
+                  onclick="
+                    deleteEntry(
+                      '${escapeJavaScript(
+                        entry.id
+                      )}',
+                      this
+                    )
+                  "
+                >
+                  delete
+                </button>
+              </td>
+            </tr>
+          `;
+        }
+      );
+
+      logWindow.document.open();
+
+      logWindow.document.write(`
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+          <title>
+            critter activity log
+          </title>
+
+          <style>
+            body {
+              background: #000;
+              color: #fff;
+              font-family:
+                "Century Gothic",
+                sans-serif;
+              padding: 20px;
+            }
+
+            h2 {
+              text-align: center;
+            }
+
+            table {
+              width: 100%;
+              border-collapse:
+                collapse;
+            }
+
+            th,
+            td {
+              border:
+                1px solid #555;
+              padding: 10px;
+              text-align: left;
+              vertical-align: top;
+            }
+
+            th {
+              background: #222;
+            }
+
+            td {
+              background: #111;
+            }
+
+            button {
+              padding: 7px 12px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              color: #fff;
+            }
+
+            .deleteButton {
+              background: #722;
+            }
+
+            .deleteButton:hover {
+              background: #933;
+            }
+
+            .emptyMessage {
+              display: none;
+              margin-top: 20px;
+              color: #aaa;
+              text-align: center;
+            }
+          </style>
+
+        </head>
+
+        <body>
+
+          <h2>activity log</h2>
+
+          <table id="activityTable">
+
+            <thead>
+              <tr>
+                <th>date/time</th>
+                <th>type</th>
+                <th>agt id</th>
+                <th>mbr id/pa#</th>
+                <th>action/res</th>
+                <th>delete</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${rows}
+            </tbody>
+
+          </table>
+
+          <div
+            id="emptyMessage"
+            class="emptyMessage"
+          >
+            no saved entries
+          </div>
+
+          <script>
+            function deleteEntry(
+              entryId,
+              button
+            ) {
+              const confirmed =
+                confirm(
+                  "delete this activity log entry?"
+                );
+
+              if (!confirmed) {
+                return;
+              }
+
+              if (
+                window.opener &&
+                !window.opener.closed
+              ) {
+                window.opener
+                  .deleteLogEntry(
+                    entryId
+                  );
+              }
+
+              const row =
+                button.closest(
+                  "tr"
+                );
+
+              if (row) {
+                row.remove();
+              }
+
+              const remainingRows =
+                document
+                  .querySelectorAll(
+                    "#activityTable tbody tr"
+                  );
+
+              if (
+                remainingRows.length ===
+                0
+              ) {
+                document
+                  .getElementById(
+                    "activityTable"
+                  )
+                  .style.display =
+                    "none";
+
+                document
+                  .getElementById(
+                    "emptyMessage"
+                  )
+                  .style.display =
+                    "block";
+              }
+            }
+          <\/script>
+
+        </body>
+
+        </html>
+      `);
+
+      logWindow.document.close();
+    }
+
+    function clearLog() {
+      if (
+        activityLog.length === 0
+      ) {
+        alert(
+          "there are no saved entries."
+        );
+
+        return;
+      }
+
+      const confirmed =
+        confirm(
+          "are you sure you want to clear the entire activity log?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      activityLog = [];
+
+      localStorage.removeItem(
+        "critterActivityLog"
+      );
+
+      updateLogCount();
+
+      showStatus(
+        "activity log cleared"
+      );
+    }
+
+    function csvEscape(value) {
+      const text =
+        String(value || "")
+          .replace(
+            /"/g,
+            '""'
+          );
+
+      return `"${text}"`;
+    }
+
+    function downloadCSV() {
+      if (
+        activityLog.length === 0
+      ) {
+        alert(
+          "there are no saved entries to download."
+        );
+
+        return;
+      }
+
+      const headers = [
+        "date/time",
+        "type",
+        "agt id",
+        "mbr id/pa#",
+        "action/res"
+      ];
+
+      const rows =
+        activityLog.map(
+          function (entry) {
+            return [
+              entry.dateTime,
+              entry.type,
+              entry.agentId,
+              entry.memberPa,
+              entry.actionResolution
+            ];
+          }
+        );
+
+      const csvData = [
+        headers,
+        ...rows
+      ]
+        .map(
+          function (row) {
+            return row
+              .map(csvEscape)
+              .join(",");
+          }
+        )
+        .join("\n");
+
+      const blob =
+        new Blob(
+          [
+            "\uFEFF" +
+            csvData
+          ],
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+        );
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+      const today =
+        new Date()
+          .toISOString()
+          .split("T")[0];
+
+      link.href = url;
+
+      link.download =
+        `critter-activity-log-${today}.csv`;
+
+      document.body
+        .appendChild(link);
+
+      link.click();
+
+      document.body
+        .removeChild(link);
+
+      URL.revokeObjectURL(url);
+
+      showStatus(
+        "excel csv downloaded"
+      );
+    }
+  </script>
 
 </body>
 </html>
