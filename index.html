@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>critter</title>
-
 <style>
 :root{
   --black:#050505;
@@ -50,11 +49,9 @@ body{
   background:var(--mustardDark);
   color:var(--white);
 }
-.page{
-  padding:20px;
-}
+.page{padding:20px}
 .container{
-  max-width:660px;
+  max-width:680px;
   margin:auto;
   padding:22px;
   background:var(--panel);
@@ -109,9 +106,7 @@ textarea{
   border:1px solid var(--border);
   border-radius:12px;
 }
-.section.active{
-  display:block;
-}
+.section.active{display:block}
 .selector-card{
   padding:14px;
   background:var(--panel2);
@@ -133,32 +128,18 @@ button{
   font-family:inherit;
   font-size:.9rem;
 }
-button:hover{
-  background:var(--mustard);
-}
-button.secondary{
-  background:#333;
-}
-button.secondary:hover{
-  background:#555;
-}
-button.danger{
-  background:var(--danger);
-}
-button.danger:hover{
-  background:#9f2a2a;
-}
+button:hover{background:var(--mustard)}
+button.secondary{background:#333}
+button.secondary:hover{background:#555}
+button.danger{background:var(--danger)}
+button.danger:hover{background:#9f2a2a}
 button.small{
   padding:5px 9px;
   margin:2px;
   font-size:.8rem;
 }
-.output{
-  margin-top:16px;
-}
-.output textarea{
-  min-height:110px;
-}
+.output{margin-top:16px}
+.output textarea{min-height:110px}
 .status{
   min-height:22px;
   margin-top:10px;
@@ -211,6 +192,28 @@ td.actions{
   padding:16px;
   color:var(--muted);
   text-align:center;
+}
+.date-card{
+  margin-top:24px;
+  padding:18px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  text-align:center;
+}
+.date-card h2{
+  margin:0 0 10px;
+  color:var(--yellow);
+}
+.future-date{
+  color:var(--mustard);
+  font-size:1.45rem;
+  font-weight:bold;
+}
+.today-date{
+  margin-top:9px;
+  color:var(--white);
+  font-size:.85rem;
 }
 @media(max-width:650px){
   .page{padding:12px}
@@ -343,9 +346,7 @@ td.actions{
 <section class="log-card">
   <h3>activity log</h3>
 
-  <div id="logCount" class="log-count">
-    0 saved entries
-  </div>
+  <div id="logCount" class="log-count">0 saved entries</div>
 
   <div class="buttons">
     <button onclick="viewLog()">view</button>
@@ -356,6 +357,12 @@ td.actions{
   <div id="logArea" class="table-wrap">
     <div class="empty">no saved entries</div>
   </div>
+</section>
+
+<section class="date-card">
+  <h2>14 days from today</h2>
+  <div id="futureDate" class="future-date">loading...</div>
+  <div id="todayDate" class="today-date"></div>
 </section>
 
 </div>
@@ -369,229 +376,104 @@ let activityLog = [];
 
 const critResOptions = {
   "pa update": [
-    {
-      label: "dating",
-      text: "updated pa detailing on file to reflect dating approved by rph"
-    },
-    {
-      label: "strength",
-      text: "updated pa detailing on file to reflect strength approved by rph"
-    },
-    {
-      label: "drug",
-      text: "updated pa detailing on file to reflect drug approved by rph"
-    },
-    {
-      label: "quantity",
-      text: "updated pa on file to reflect quantity approved by rph"
-    },
-    {
-      label: "high dollar",
-      text: "updated pa detailing on file for high dollar on approved medication"
-    },
-    {
-      label: "backdated",
-      text: "backdated to mm/dd/yyyy per request"
-    },
-    {
-      label: "missing pa",
-      text: "added pa as it was not added when case was approved"
-    },
-    {
-      label: "rx restrictions",
-      text: "updated rx restrictions and claims paid"
-    },
-    {
-      label: "extended loading",
-      text: "extended loading dose pa by 2 weeks per pharmacy request"
-    }
+    {label:"dating",text:"updated pa detailing on file to reflect dating approved by rph"},
+    {label:"strength",text:"updated pa detailing on file to reflect strength approved by rph"},
+    {label:"drug",text:"updated pa detailing on file to reflect drug approved by rph"},
+    {label:"quantity",text:"updated pa on file to reflect quantity approved by rph"},
+    {label:"high dollar",text:"updated pa detailing on file for high dollar on approved medication"},
+    {label:"backdated",text:"backdated to mm/dd/yyyy per request"},
+    {label:"missing pa",text:"added pa as it was not added when case was approved"},
+    {label:"rx restrictions",text:"updated rx restrictions and claims paid"},
+    {label:"extended loading",text:"extended loading dose pa by 2 weeks per pharmacy request"}
   ],
-
   "form change": [
-    {
-      label: "pens to syringe",
-      text: "updated from pens to syringe per request"
-    },
-    {
-      label: "syringe to pens",
-      text: "updated from syringe to pens per request"
-    },
-    {
-      label: "multidose to vials",
-      text: "updated from multidose bottle to single-use vials per request"
-    }
+    {label:"pens to syringe",text:"updated from pens to syringe per request"},
+    {label:"syringe to pens",text:"updated from syringe to pens per request"},
+    {label:"multidose to vials",text:"updated from multidose bottle to single-use vials per request"}
   ],
-
   "transfer": [
-    {
-      label: "same plan transfer",
-      text: "transferred from previous account same type of plan and um review"
-    },
-    {
-      label: "not transferable",
-      text: "pa cannot be transferred . new pa required"
-    },
-    {
-      label: "xfer",
-      text: "xfer to correct lob"
-    }
+    {label:"same plan transfer",text:"transferred from previous account same type of plan and um review"},
+    {label:"not transferable",text:"pa cannot be transferred . new pa required"},
+    {label:"xfer",text:"xfer to correct lob"}
   ],
-
   "call": [
-    {
-      label: "denial call",
-      text: "called to go over denial . reviewed next steps"
-    },
-    {
-      label: "approval call",
-      text: "called to go over approval . provided approval information"
-    },
-    {
-      label: "ssa redirect",
-      text: "advised clinical review cannot assist . referred to ssa"
-    }
+    {label:"denial call",text:"called to go over denial . reviewed next steps"},
+    {label:"approval call",text:"called to go over approval . provided approval information"},
+    {label:"ssa redirect",text:"advised clinical review cannot assist . referred to ssa"}
   ],
-
   "other": [
-    {
-      label: "custom",
-      text: ""
-    }
+    {label:"custom",text:""}
   ]
 };
 
 const providerResOptions = {
   "pa": [
-    {
-      label: "intake completed",
-      text: "verbal pa intake completed for {{rx}}"
-    },
-    {
-      label: "missing info",
-      text: "called regarding missing information"
-    }
+    {label:"intake completed",text:"verbal pa intake completed for {rx}"},
+    {label:"missing info",text:"called regarding missing information"}
   ],
-
   "transfer": [
-    {
-      label: "xfer to correct lob",
-      text: "xfer to correct lob"
-    }
+    {label:"xfer to correct lob",text:"xfer to correct lob"}
   ],
-
   "other": [
-    {
-      label: "custom",
-      text: ""
-    }
+    {label:"custom",text:""}
   ]
 };
 
 function joinParts(parts) {
-  return parts
-    .map(function(part) {
-      return String(part || "").trim();
-    })
-    .filter(Boolean)
-    .join(" . ");
+  return parts.map(function(part) {
+    return String(part || "").trim();
+  }).filter(Boolean).join(" . ");
 }
 
 function replaceProviderTokens(text) {
   const rx = document.getElementById("p_rx").value.trim();
-
-  return text.replaceAll("{{rx}}", rx);
+  return text.replaceAll("{rx}", rx);
 }
 
 function saveFormState() {
   const state = {
     formType: document.getElementById("formType").value,
     values: {},
-    output: document.getElementById("generatedText")
-      ? document.getElementById("generatedText").value
-      : ""
+    output: document.getElementById("generatedText") ? document.getElementById("generatedText").value : ""
   };
 
   document.querySelectorAll(".persist").forEach(function(el) {
     state.values[el.id] = el.value;
   });
 
-  localStorage.setItem(
-    stateKey,
-    JSON.stringify(state)
-  );
+  localStorage.setItem(stateKey, JSON.stringify(state));
 }
 
 function restoreFormState() {
-  const state = JSON.parse(
-    localStorage.getItem(stateKey) || "null"
-  );
+  const state = JSON.parse(localStorage.getItem(stateKey) || "null");
+  if (!state) return;
 
-  if (!state) {
-    return;
-  }
-
-  document.getElementById("formType").value =
-    state.formType || "";
+  document.getElementById("formType").value = state.formType || "";
 
   Object.keys(state.values || {}).forEach(function(id) {
     const el = document.getElementById(id);
-
-    if (el) {
-      el.value = state.values[id];
-    }
+    if (el) el.value = state.values[id];
   });
 
   showSelectedForm(false);
   loadCritSpecificResOptions(false);
   loadProviderSpecificResOptions(false);
 
-  if (state.output) {
-    showOutput(state.output);
-  }
+  if (state.output) showOutput(state.output);
 }
 
 function showSelectedForm(shouldSave = true) {
   const type = document.getElementById("formType").value;
 
-  document
-    .getElementById("critSection")
-    .classList
-    .remove("active");
+  document.getElementById("critSection").classList.remove("active");
+  document.getElementById("providerSection").classList.remove("active");
+  document.getElementById("calSection").classList.remove("active");
 
-  document
-    .getElementById("providerSection")
-    .classList
-    .remove("active");
+  if (type === "crit") document.getElementById("critSection").classList.add("active");
+  if (type === "provider") document.getElementById("providerSection").classList.add("active");
+  if (type === "cal") document.getElementById("calSection").classList.add("active");
 
-  document
-    .getElementById("calSection")
-    .classList
-    .remove("active");
-
-  if (type === "crit") {
-    document
-      .getElementById("critSection")
-      .classList
-      .add("active");
-  }
-
-  if (type === "provider") {
-    document
-      .getElementById("providerSection")
-      .classList
-      .add("active");
-  }
-
-  if (type === "cal") {
-    document
-      .getElementById("calSection")
-      .classList
-      .add("active");
-  }
-
-  if (shouldSave) {
-    saveFormState();
-  }
+  if (shouldSave) saveFormState();
 }
 
 function loadCritSpecificResOptions(shouldSave = true) {
@@ -599,8 +481,7 @@ function loadCritSpecificResOptions(shouldSave = true) {
   const specific = document.getElementById("c_res_specific");
   const currentValue = specific.value;
 
-  specific.innerHTML =
-    '<option value="">-- select specific res --</option>';
+  specific.innerHTML = '<option value="">-- select specific res --</option>';
 
   if (type && critResOptions[type]) {
     critResOptions[type].forEach(function(option) {
@@ -611,13 +492,8 @@ function loadCritSpecificResOptions(shouldSave = true) {
     });
   }
 
-  if (currentValue) {
-    specific.value = currentValue;
-  }
-
-  if (shouldSave) {
-    saveFormState();
-  }
+  if (currentValue) specific.value = currentValue;
+  if (shouldSave) saveFormState();
 }
 
 function loadProviderSpecificResOptions(shouldSave = true) {
@@ -625,8 +501,7 @@ function loadProviderSpecificResOptions(shouldSave = true) {
   const specific = document.getElementById("p_res_specific");
   const currentValue = specific.value;
 
-  specific.innerHTML =
-    '<option value="">-- select specific res --</option>';
+  specific.innerHTML = '<option value="">-- select specific res --</option>';
 
   if (type && providerResOptions[type]) {
     providerResOptions[type].forEach(function(option) {
@@ -637,40 +512,25 @@ function loadProviderSpecificResOptions(shouldSave = true) {
     });
   }
 
-  if (currentValue) {
-    specific.value = currentValue;
-  }
-
-  if (shouldSave) {
-    saveFormState();
-  }
+  if (currentValue) specific.value = currentValue;
+  if (shouldSave) saveFormState();
 }
 
 function addCritResolution() {
-  const selectedText =
-    document.getElementById("c_res_specific").value;
-
+  const selectedText = document.getElementById("c_res_specific").value;
   if (!selectedText) {
     saveFormState();
     return;
   }
 
   const resBox = document.getElementById("c_res");
-
-  resBox.value = joinParts([
-    resBox.value,
-    selectedText
-  ]);
-
+  resBox.value = joinParts([resBox.value, selectedText]);
   document.getElementById("c_res_specific").value = "";
-
   saveFormState();
 }
 
 function addProviderResolution() {
-  let selectedText =
-    document.getElementById("p_res_specific").value;
-
+  let selectedText = document.getElementById("p_res_specific").value;
   selectedText = replaceProviderTokens(selectedText);
 
   if (!selectedText) {
@@ -679,20 +539,13 @@ function addProviderResolution() {
   }
 
   const resBox = document.getElementById("p_res");
-
-  resBox.value = joinParts([
-    resBox.value,
-    selectedText
-  ]);
-
+  resBox.value = joinParts([resBox.value, selectedText]);
   document.getElementById("p_res_specific").value = "";
-
   saveFormState();
 }
 
 function createNote() {
   const type = document.getElementById("formType").value;
-
   if (!type) {
     showStatus("please select crit, provider, or cal");
     return;
@@ -702,24 +555,12 @@ function createNote() {
   let logEntry = null;
 
   if (type === "crit") {
-    const agentId =
-      document.getElementById("c_id").value.trim();
+    const agentId = document.getElementById("c_id").value.trim();
+    const memberPa = document.getElementById("c_mbr_pa").value.trim();
+    const rx = document.getElementById("c_rx").value.trim();
+    const resolution = document.getElementById("c_res").value.trim();
 
-    const memberPa =
-      document.getElementById("c_mbr_pa").value.trim();
-
-    const rx =
-      document.getElementById("c_rx").value.trim();
-
-    const resolution =
-      document.getElementById("c_res").value.trim();
-
-    fullOutput = joinParts([
-      agentId,
-      rx,
-      resolution,
-      "drp crit prime 866.202.3474"
-    ]);
+    fullOutput = joinParts([agentId, rx, resolution, "drp crit prime 866.202.3474"]);
 
     logEntry = {
       id: makeId(),
@@ -734,28 +575,13 @@ function createNote() {
   }
 
   if (type === "provider") {
-    const name =
-      document.getElementById("p_name").value.trim();
+    const name = document.getElementById("p_name").value.trim();
+    const title = document.getElementById("p_title").value.trim();
+    const memberPa = document.getElementById("p_mbr_pa").value.trim();
+    const rx = document.getElementById("p_rx").value.trim();
+    const resolution = document.getElementById("p_res").value.trim();
 
-    const title =
-      document.getElementById("p_title").value.trim();
-
-    const memberPa =
-      document.getElementById("p_mbr_pa").value.trim();
-
-    const rx =
-      document.getElementById("p_rx").value.trim();
-
-    const resolution =
-      document.getElementById("p_res").value.trim();
-
-    fullOutput = joinParts([
-      name,
-      title,
-      rx,
-      resolution,
-      "drp crit prime 866.202.3474"
-    ]);
+    fullOutput = joinParts([name, title, rx, resolution, "drp crit prime 866.202.3474"]);
 
     logEntry = {
       id: makeId(),
@@ -770,14 +596,9 @@ function createNote() {
   }
 
   if (type === "cal") {
-    const agentId =
-      document.getElementById("cal_id").value.trim();
-
-    const pa =
-      document.getElementById("cal_pa").value.trim();
-
-    const resolution =
-      document.getElementById("cal_res").value.trim();
+    const agentId = document.getElementById("cal_id").value.trim();
+    const pa = document.getElementById("cal_pa").value.trim();
+    const resolution = document.getElementById("cal_res").value.trim();
 
     logEntry = {
       id: makeId(),
@@ -794,7 +615,6 @@ function createNote() {
   activityLog.unshift(logEntry);
   saveLog();
   renderLog();
-
   saveFormState();
   showStatus("added");
 }
@@ -802,21 +622,14 @@ function createNote() {
 function showOutput(text) {
   document.getElementById("output").innerHTML = `
     <textarea id="generatedText" readonly onclick="this.select()"></textarea>
-
-    <div class="buttons">
-      <button onclick="copyOutput()">copy</button>
-    </div>
+    <div class="buttons"><button onclick="copyOutput()">copy</button></div>
   `;
-
   document.getElementById("generatedText").value = text;
 }
 
 async function copyOutput() {
   const textarea = document.getElementById("generatedText");
-
-  if (!textarea) {
-    return;
-  }
+  if (!textarea) return;
 
   try {
     await navigator.clipboard.writeText(textarea.value);
@@ -834,66 +647,38 @@ function clearOutput() {
 }
 
 function resetForm() {
-  if (!confirm("reset current form?")) {
-    return;
-  }
+  if (!confirm("reset current form?")) return;
 
   document.getElementById("formType").value = "";
 
   document.querySelectorAll(".persist").forEach(function(el) {
-    if (el.tagName === "SELECT") {
-      el.selectedIndex = 0;
-    } else {
-      el.value = "";
-    }
+    if (el.tagName === "SELECT") el.selectedIndex = 0;
+    else el.value = "";
   });
 
-  document
-    .getElementById("critSection")
-    .classList
-    .remove("active");
+  document.getElementById("critSection").classList.remove("active");
+  document.getElementById("providerSection").classList.remove("active");
+  document.getElementById("calSection").classList.remove("active");
 
-  document
-    .getElementById("providerSection")
-    .classList
-    .remove("active");
-
-  document
-    .getElementById("calSection")
-    .classList
-    .remove("active");
-
-  document.getElementById("c_res_specific").innerHTML =
-    '<option value="">-- select specific res --</option>';
-
-  document.getElementById("p_res_specific").innerHTML =
-    '<option value="">-- select specific res --</option>';
+  document.getElementById("c_res_specific").innerHTML = '<option value="">-- select specific res --</option>';
+  document.getElementById("p_res_specific").innerHTML = '<option value="">-- select specific res --</option>';
 
   document.getElementById("output").innerHTML = "";
-
   localStorage.removeItem(stateKey);
-
   showStatus("reset");
 }
 
 function makeId() {
-  return (
-    Date.now().toString() +
-    Math.random().toString(16).slice(2)
-  );
+  return Date.now().toString() + Math.random().toString(16).slice(2);
 }
 
 function saveLog() {
-  localStorage.setItem(
-    logKey,
-    JSON.stringify(activityLog)
-  );
+  localStorage.setItem(logKey, JSON.stringify(activityLog));
 }
 
 function loadLog() {
   try {
-    activityLog =
-      JSON.parse(localStorage.getItem(logKey)) || [];
+    activityLog = JSON.parse(localStorage.getItem(logKey)) || [];
   } catch (error) {
     activityLog = [];
   }
@@ -901,15 +686,12 @@ function loadLog() {
 
 function renderLog() {
   document.getElementById("logCount").textContent =
-    activityLog.length === 1
-      ? "1 saved entry"
-      : activityLog.length + " saved entries";
+    activityLog.length === 1 ? "1 saved entry" : activityLog.length + " saved entries";
 
   const area = document.getElementById("logArea");
 
   if (!activityLog.length) {
-    area.innerHTML =
-      '<div class="empty">no saved entries</div>';
+    area.innerHTML = '<div class="empty">no saved entries</div>';
     return;
   }
 
@@ -921,9 +703,7 @@ function renderLog() {
         <td>${escapeHTML(entry.agentId)}</td>
         <td>${escapeHTML(entry.memberPa)}</td>
         <td>${escapeHTML(entry.actionResolution)}</td>
-        <td class="actions">
-          <button class="small" onclick="deleteLogEntry('${entry.id}')">delete</button>
-        </td>
+        <td class="actions"><button class="small" onclick="deleteLogEntry('${entry.id}')">delete</button></td>
       </tr>
     `;
   }).join("");
@@ -951,9 +731,7 @@ function viewLog() {
 }
 
 function deleteLogEntry(id) {
-  if (!confirm("delete this entry?")) {
-    return;
-  }
+  if (!confirm("delete this entry?")) return;
 
   activityLog = activityLog.filter(function(entry) {
     return entry.id !== id;
@@ -970,9 +748,7 @@ function clearLog() {
     return;
   }
 
-  if (!confirm("clear entire activity log?")) {
-    return;
-  }
+  if (!confirm("clear entire activity log?")) return;
 
   activityLog = [];
   localStorage.removeItem(logKey);
@@ -986,57 +762,33 @@ function popCSV() {
     return;
   }
 
-  const rows = [
-    ["date/time","type","agt id","mbr id/pa#","action/res"]
-  ];
+  const rows = [["date/time","type","agt id","mbr id/pa#","action/res"]];
 
   activityLog.forEach(function(entry) {
-    rows.push([
-      entry.dateTime,
-      entry.type,
-      entry.agentId,
-      entry.memberPa,
-      entry.actionResolution
-    ]);
+    rows.push([entry.dateTime, entry.type, entry.agentId, entry.memberPa, entry.actionResolution]);
   });
 
-  const csv = rows
-    .map(function(row) {
-      return row
-        .map(csvEscape)
-        .join(",");
-    })
-    .join("\n");
+  const csv = rows.map(function(row) {
+    return row.map(csvEscape).join(",");
+  }).join("\n");
 
-  const blob = new Blob(
-    ["\uFEFF" + csv],
-    {type:"text/csv;charset=utf-8;"}
-  );
-
+  const blob = new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8;"});
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
 
   link.href = url;
-  link.download =
-    "critter-activity-log-" +
-    new Date().toISOString().split("T")[0] +
-    ".csv";
+  link.download = "critter-activity-log-" + new Date().toISOString().split("T")[0] + ".csv";
 
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 
   URL.revokeObjectURL(url);
-
   showStatus("csv downloaded");
 }
 
 function csvEscape(value) {
-  return (
-    '"' +
-    String(value || "").replace(/"/g,'""') +
-    '"'
-  );
+  return '"' + String(value || "").replace(/"/g,'""') + '"';
 }
 
 function escapeHTML(value) {
@@ -1047,7 +799,6 @@ function escapeHTML(value) {
 
 function showStatus(message) {
   const status = document.getElementById("statusMessage");
-
   status.textContent = message;
 
   setTimeout(function() {
@@ -1055,36 +806,45 @@ function showStatus(message) {
   }, 2500);
 }
 
+function formatDateLong(date) {
+  return date.toLocaleDateString("en-US", {
+    weekday:"long",
+    month:"2-digit",
+    day:"2-digit",
+    year:"numeric"
+  }).toLowerCase();
+}
+
+function displayFourteenDayDate() {
+  const today = new Date();
+  const future = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  future.setDate(future.getDate() + 14);
+
+  document.getElementById("futureDate").textContent = formatDateLong(future);
+  document.getElementById("todayDate").textContent = "today: " + formatDateLong(today);
+}
+
 document.addEventListener("DOMContentLoaded",function() {
   loadLog();
   renderLog();
   restoreFormState();
+  displayFourteenDayDate();
 
-  document
-    .getElementById("formType")
-    .addEventListener("change",function() {
-      showSelectedForm(true);
-    });
+  document.getElementById("formType").addEventListener("change",function() {
+    showSelectedForm(true);
+  });
 
-  document
-    .getElementById("c_res_type")
-    .addEventListener("change",function() {
-      loadCritSpecificResOptions(true);
-    });
+  document.getElementById("c_res_type").addEventListener("change",function() {
+    loadCritSpecificResOptions(true);
+  });
 
-  document
-    .getElementById("c_res_specific")
-    .addEventListener("change",addCritResolution);
+  document.getElementById("c_res_specific").addEventListener("change",addCritResolution);
 
-  document
-    .getElementById("p_res_type")
-    .addEventListener("change",function() {
-      loadProviderSpecificResOptions(true);
-    });
+  document.getElementById("p_res_type").addEventListener("change",function() {
+    loadProviderSpecificResOptions(true);
+  });
 
-  document
-    .getElementById("p_res_specific")
-    .addEventListener("change",addProviderResolution);
+  document.getElementById("p_res_specific").addEventListener("change",addProviderResolution);
 
   document.querySelectorAll(".persist").forEach(function(el) {
     el.addEventListener("input",saveFormState);
