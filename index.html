@@ -2,407 +2,1096 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>critter</title>
-<style>
 
+<style>
 :root{
-  --bg:#050505;
+  --black:#050505;
   --panel:#111111;
-  --panel-2:#181818;
-  --border:#3b3218;
+  --panel2:#181818;
   --white:#ffffff;
   --yellow:#ffd84d;
   --mustard:#c99a24;
-  --mustard-dark:#8f6814;
+  --mustardDark:#8f6814;
+  --border:#4b3a16;
   --muted:#cfcfcf;
+  --danger:#7a1f1f;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   min-height:100vh;
-  font-family:"Century Gothic",Arial,sans-serif;
-  background:var(--bg);
+  background:var(--black);
   color:var(--white);
+  font-family:"Century Gothic",Arial,sans-serif;
 }
 .site-nav{
-  background:#0d0d0d;
-  padding:10px 16px;
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
   gap:6px;
+  padding:10px 16px;
+  background:#0d0d0d;
   border-bottom:1px solid var(--border);
 }
 .site-nav a{
-  color:var(--white);
-  text-decoration:none;
   padding:7px 10px;
   border-radius:6px;
+  color:var(--white);
+  text-decoration:none;
   font-size:.9rem;
 }
-.site-nav a:hover{background:#2a2414;color:var(--yellow)}
-.site-nav a.active{background:var(--mustard-dark);color:var(--white)}
-
-.page{padding:20px}
+.site-nav a:hover{
+  background:#2a2414;
+  color:var(--yellow);
+}
+.site-nav a.active{
+  background:var(--mustardDark);
+  color:var(--white);
+}
+.page{
+  padding:20px;
+}
 .container{
-  max-width:620px;margin:auto;background:var(--panel);padding:20px;
-  border:1px solid var(--border);border-radius:10px
+  max-width:660px;
+  margin:auto;
+  padding:22px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.5);
 }
-h2{text-align:center;color:var(--mustard)}
-h3{text-align:center;color:var(--yellow)}
-label{display:block;margin-top:10px;color:var(--yellow)}
-input,select,textarea{
-  width:100%;padding:10px;margin-top:5px;border:1px solid #655522;
-  border-radius:6px;background:#222;color:var(--white);font-family:inherit
+h1{
+  margin:0 0 18px;
+  color:var(--mustard);
+  text-align:center;
+  font-size:2rem;
 }
-textarea{min-height:75px}
-.section{display:none}
-.selector-wrap{margin-bottom:16px}
-.buttons{text-align:center;margin-top:15px}
+h2{
+  margin:0 0 14px;
+  color:var(--yellow);
+  text-align:center;
+  font-size:1.25rem;
+}
+h3{
+  color:var(--yellow);
+  text-align:center;
+}
+label{
+  display:block;
+  margin-top:10px;
+  color:var(--yellow);
+  font-weight:600;
+}
+input,
+select,
+textarea{
+  width:100%;
+  margin-top:5px;
+  padding:10px;
+  background:#222;
+  color:var(--white);
+  border:1px solid #655522;
+  border-radius:7px;
+  font-family:inherit;
+  font-size:.95rem;
+}
+textarea{
+  min-height:82px;
+  resize:vertical;
+}
+.section{
+  display:none;
+  margin-top:16px;
+  padding:16px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+.section.active{
+  display:block;
+}
+.selector-card{
+  padding:14px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+.buttons{
+  margin-top:15px;
+  text-align:center;
+}
 button{
-  padding:8px 14px;margin:5px;background:var(--mustard-dark);color:var(--white);
-  border:none;border-radius:6px;cursor:pointer;font-family:inherit
+  padding:8px 14px;
+  margin:5px;
+  background:var(--mustardDark);
+  color:var(--white);
+  border:0;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:.9rem;
 }
-button:hover{background:var(--mustard)}
-.dangerButton{background:#6d1d1d}
-.dangerButton:hover{background:#9d2b2b}
-.output{margin-top:15px}
-.output textarea{min-height:100px}
-.logControls{margin-top:30px;padding-top:20px;border-top:1px solid var(--border);text-align:center}
-.logCount{color:var(--white);font-size:14px;margin-bottom:8px}
-.status{text-align:center;margin-top:10px;min-height:20px;color:var(--mustard)}
-.transferFields{display:none;margin-top:15px;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--panel-2)}
-.resetArea,.clearLogArea{text-align:center;margin-top:10px}
+button:hover{
+  background:var(--mustard);
+}
+button.secondary{
+  background:#333;
+}
+button.secondary:hover{
+  background:#555;
+}
+button.danger{
+  background:var(--danger);
+}
+button.danger:hover{
+  background:#9f2a2a;
+}
+button.small{
+  padding:5px 9px;
+  margin:2px;
+  font-size:.8rem;
+}
+.output{
+  margin-top:16px;
+}
+.output textarea{
+  min-height:110px;
+}
+.status{
+  min-height:22px;
+  margin-top:10px;
+  color:var(--mustard);
+  text-align:center;
+  font-size:.9rem;
+}
+.log-card{
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid var(--border);
+}
+.log-count{
+  color:var(--muted);
+  text-align:center;
+  font-size:.9rem;
+}
+.table-wrap{
+  margin-top:14px;
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+table{
+  width:100%;
+  min-width:720px;
+  border-collapse:collapse;
+}
+th,
+td{
+  padding:9px;
+  border-bottom:1px solid #3b3218;
+  text-align:left;
+  vertical-align:top;
+  font-size:.85rem;
+}
+th{
+  background:#211c0d;
+  color:var(--yellow);
+}
+td{
+  background:#121212;
+  color:var(--white);
+}
+td.actions{
+  white-space:nowrap;
+  text-align:center;
+}
+.empty{
+  padding:16px;
+  color:var(--muted);
+  text-align:center;
+}
+@media(max-width:650px){
+  .page{padding:12px}
+  .container{padding:18px}
+  h1{font-size:1.65rem}
+}
 </style>
 </head>
+
 <body>
+
 <nav class="site-nav">
-<a href="https://drpboop.github.io/home/">home</a>
-<a class="active" href="https://drpboop.github.io/crit/">critter</a>
-<a href="https://drpboop.github.io/refill-lookback/">refill lookback</a>
-<a href="https://drpboop.github.io/situational/">situational</a>
+  <a href="https://drpboop.github.io/home/">home</a>
+  <a class="active" href="https://drpboop.github.io/crit/">critter</a>
+  <a href="https://drpboop.github.io/refill-lookback/">refill lookback</a>
+  <a href="https://drpboop.github.io/situational/">situational</a>
+  <a href="https://drpboop.github.io/status-log/">status log</a>
 </nav>
 
 <div class="page">
 <div class="container">
-<h2>critter</h2>
 
-<div class="selector-wrap">
-<label for="formType">form type</label>
-<select id="formType">
-<option value="">-- select crit or provider --</option>
-<option value="crit">crit</option>
-<option value="provider">provider</option>
-</select>
-</div>
+<h1>critter</h1>
 
-<div id="crit" class="section">
-<label>agt id</label><input class="persist" id="c_id">
-<label>mbr id / pa#</label><input class="persist" id="c_mbr_pa">
-<label>rx</label><input class="persist" id="c_rx">
-<label>res</label>
-<select id="c_quick">
-<option value="">-- select --</option>
-<option value="updated pa detailing on file to reflect dating approved by rph">pa dating</option>
-<option value="updated pa detailing on file to reflect strength approved by rph">pa strength</option>
-<option value="updated pa detailing on file to reflect drug approved by rph">pa drug</option>
-<option value="updated pa on file to reflect quantity approved by rph">quantity update</option>
-<option value="updated from pens to syringes per member request">pens → syringes mbr</option>
-<option value="updated from pens to syringes per doctor's request">pens → syringes dr</option>
-<option value="updated from syringes to pens per member request">syringes → pens mbr</option>
-<option value="updated from syringes to pens per doctor's request">syringes → pens dr</option>
-<option value="updated from multidose bottle to single-use vials per mdo request">multidose → vials</option>
-<option value="updated pa detailing on file for high dollar on approved medication">high dollar</option>
-<option value="transferred from previous account same type of plan and um review">same plan transfer</option>
-<option value="pa cannot be transferred // new pa required">pa not transferable</option>
-<option value="extended loading dose pa by 2 weeks per pharmacy request (verify claims received)">extended loading</option>
-<option value="backdated to mm/dd/yyyy per mdo request">backdated</option>
-<option value="added pa as it was not added when case was approved">missing pa</option>
-<option value="updated rx restrictions and claims paid">rx restrictions</option>
-<option value="called to go over denial // reviewed next steps">denial call</option>
-<option value="called to go over approval // provided approval information">approval call</option>
-<option value="advised clinical review cannot assist // referred to ssa">ssa redirect</option>
-<option value="xfer to correct lob">xfer</option>
-</select>
-<label>resolution</label><textarea class="persist" id="c_res"></textarea>
-</div>
+<section class="selector-card">
+  <label for="formType">form type</label>
+  <select id="formType">
+    <option value="">-- select --</option>
+    <option value="crit">crit</option>
+    <option value="provider">provider</option>
+    <option value="cal">cal</option>
+  </select>
+</section>
 
-<div id="provider" class="section">
-<label>name</label><input class="persist" id="p_name">
-<label>job title</label><input class="persist" id="p_title">
-<label>npi#</label><input class="persist" id="p_npi">
-<label>cb#</label><input class="persist" id="p_cb">
-<label>fax#</label><input class="persist" id="p_fax">
-<label>mbr id / pa#</label><input class="persist" id="p_mbr_pa">
-<label>rx</label><input class="persist" id="p_rx">
-<label>res</label>
-<select class="persist" id="p_quick">
-<option value="">-- select --</option>
-<option value="verbal">verbal pa request</option>
-<option value="xfer">xfer</option>
-</select>
+<section id="critSection" class="section">
+  <h2>crit</h2>
 
-<div id="providerTransferFields" class="transferFields">
-<label>xfer reason</label>
-<select class="persist" id="p_xfer_reason">
-<option value="">-- select --</option>
-<option value="pa">pa</option>
-<option value="appeal">appeal</option>
-<option value="request p2p">request p2p</option>
-<option value="go over denial">go over denial</option>
-</select>
-<label>xferred to</label><input class="persist" id="p_xfer_to">
-</div>
+  <label for="c_id">agt id</label>
+  <input id="c_id" class="persist" type="text">
 
-<label>resolution</label><textarea class="persist" id="p_res"></textarea>
-</div>
+  <label for="c_mbr_pa">mbr id / pa#</label>
+  <input id="c_mbr_pa" class="persist" type="text">
+
+  <label for="c_rx">rx</label>
+  <input id="c_rx" class="persist" type="text">
+
+  <label for="c_res_type">res type</label>
+  <select id="c_res_type" class="persist">
+    <option value="">-- select res type --</option>
+    <option value="pa update">pa update</option>
+    <option value="form change">form change</option>
+    <option value="transfer">transfer</option>
+    <option value="call">call</option>
+    <option value="other">other</option>
+  </select>
+
+  <label for="c_res_specific">specific res</label>
+  <select id="c_res_specific" class="persist">
+    <option value="">-- select specific res --</option>
+  </select>
+
+  <label for="c_res">resolution</label>
+  <textarea id="c_res" class="persist"></textarea>
+</section>
+
+<section id="providerSection" class="section">
+  <h2>provider</h2>
+
+  <label for="p_name">name</label>
+  <input id="p_name" class="persist" type="text">
+
+  <label for="p_title">job title</label>
+  <input id="p_title" class="persist" type="text">
+
+  <label for="p_npi">npi#</label>
+  <input id="p_npi" class="persist" type="text">
+
+  <label for="p_fax">fax#</label>
+  <input id="p_fax" class="persist" type="text">
+
+  <label for="p_mbr_pa">mbr id / pa#</label>
+  <input id="p_mbr_pa" class="persist" type="text">
+
+  <label for="p_rx">rx</label>
+  <input id="p_rx" class="persist" type="text">
+
+  <label for="p_res_type">res type</label>
+  <select id="p_res_type" class="persist">
+    <option value="">-- select res type --</option>
+    <option value="pa">pa</option>
+    <option value="transfer">transfer</option>
+    <option value="other">other</option>
+  </select>
+
+  <label for="p_res_specific">specific res</label>
+  <select id="p_res_specific" class="persist">
+    <option value="">-- select specific res --</option>
+  </select>
+
+  <label for="p_res">resolution</label>
+  <textarea id="p_res" class="persist"></textarea>
+</section>
+
+<section id="calSection" class="section">
+  <h2>cal</h2>
+
+  <label for="cal_id">agt id</label>
+  <input id="cal_id" class="persist" type="text">
+
+  <label for="cal_pa">pa#</label>
+  <input id="cal_pa" class="persist" type="text">
+
+  <label for="cal_res">res</label>
+  <textarea id="cal_res" class="persist"></textarea>
+</section>
 
 <div class="buttons">
-<button onclick="generate()">create</button>
-<button onclick="clearOutput()">clear</button>
+  <button onclick="createNote()">create</button>
+  <button class="secondary" onclick="clearOutput()">clear</button>
 </div>
 
 <div id="output" class="output"></div>
-<div class="resetArea"><button onclick="resetForm()">reset</button></div>
-<div id="saveStatus" class="status"></div>
 
-<div class="logControls">
-<h3>activity log</h3>
-<div id="logCount" class="logCount">0 saved entries</div>
 <div class="buttons">
-<button onclick="downloadCSV()">pop</button>
-<button onclick="showActivityLog()">view</button>
+  <button class="secondary" onclick="resetForm()">reset</button>
 </div>
-<div class="clearLogArea">
-<button class="dangerButton" onclick="clearLog()">clear log</button>
-</div>
-</div>
+
+<div id="statusMessage" class="status"></div>
+
+<section class="log-card">
+  <h3>activity log</h3>
+
+  <div id="logCount" class="log-count">
+    0 saved entries
+  </div>
+
+  <div class="buttons">
+    <button onclick="viewLog()">view</button>
+    <button onclick="popCSV()">pop</button>
+    <button class="danger" onclick="clearLog()">clear log</button>
+  </div>
+
+  <div id="logArea" class="table-wrap">
+    <div class="empty">no saved entries</div>
+  </div>
+</section>
+
 </div>
 </div>
 
 <script>
-const stateKey="critterFormState";
-const logKey="critterActivityLog";
-let activityLog=[];
+const stateKey = "critterFormState";
+const logKey = "critterActivityLog";
 
-function saveFormState(){
-  const state={
-    formType:document.getElementById("formType").value,
-    values:{},
-    output:document.getElementById("generatedText")?.value||""
-  };
-  document.querySelectorAll(".persist").forEach(el=>state.values[el.id]=el.value);
-  localStorage.setItem(stateKey,JSON.stringify(state));
+let activityLog = [];
+
+const critResOptions = {
+  "pa update": [
+    {
+      label: "dating",
+      text: "updated pa detailing on file to reflect dating approved by rph"
+    },
+    {
+      label: "strength",
+      text: "updated pa detailing on file to reflect strength approved by rph"
+    },
+    {
+      label: "drug",
+      text: "updated pa detailing on file to reflect drug approved by rph"
+    },
+    {
+      label: "quantity",
+      text: "updated pa on file to reflect quantity approved by rph"
+    },
+    {
+      label: "high dollar",
+      text: "updated pa detailing on file for high dollar on approved medication"
+    },
+    {
+      label: "backdated",
+      text: "backdated to mm/dd/yyyy per request"
+    },
+    {
+      label: "missing pa",
+      text: "added pa as it was not added when case was approved"
+    },
+    {
+      label: "rx restrictions",
+      text: "updated rx restrictions and claims paid"
+    },
+    {
+      label: "extended loading",
+      text: "extended loading dose pa by 2 weeks per pharmacy request"
+    }
+  ],
+
+  "form change": [
+    {
+      label: "pens to syringe",
+      text: "updated from pens to syringe per request"
+    },
+    {
+      label: "syringe to pens",
+      text: "updated from syringe to pens per request"
+    },
+    {
+      label: "multidose to vials",
+      text: "updated from multidose bottle to single-use vials per request"
+    }
+  ],
+
+  "transfer": [
+    {
+      label: "same plan transfer",
+      text: "transferred from previous account same type of plan and um review"
+    },
+    {
+      label: "not transferable",
+      text: "pa cannot be transferred . new pa required"
+    },
+    {
+      label: "xfer",
+      text: "xfer to correct lob"
+    }
+  ],
+
+  "call": [
+    {
+      label: "denial call",
+      text: "called to go over denial . reviewed next steps"
+    },
+    {
+      label: "approval call",
+      text: "called to go over approval . provided approval information"
+    },
+    {
+      label: "ssa redirect",
+      text: "advised clinical review cannot assist . referred to ssa"
+    }
+  ],
+
+  "other": [
+    {
+      label: "custom",
+      text: ""
+    }
+  ]
+};
+
+const providerResOptions = {
+  "pa": [
+    {
+      label: "intake completed",
+      text: "verbal pa intake completed for {{rx}}"
+    },
+    {
+      label: "missing info",
+      text: "called regarding missing information"
+    }
+  ],
+
+  "transfer": [
+    {
+      label: "xfer to correct lob",
+      text: "xfer to correct lob"
+    }
+  ],
+
+  "other": [
+    {
+      label: "custom",
+      text: ""
+    }
+  ]
+};
+
+function joinParts(parts) {
+  return parts
+    .map(function(part) {
+      return String(part || "").trim();
+    })
+    .filter(Boolean)
+    .join(" . ");
 }
 
-function restoreFormState(){
-  const state=JSON.parse(localStorage.getItem(stateKey)||"null");
-  if(!state)return;
-  document.getElementById("formType").value=state.formType||"";
-  Object.entries(state.values||{}).forEach(([id,value])=>{
-    const el=document.getElementById(id);
-    if(el)el.value=value;
+function replaceProviderTokens(text) {
+  const rx = document.getElementById("p_rx").value.trim();
+
+  return text.replaceAll("{{rx}}", rx);
+}
+
+function saveFormState() {
+  const state = {
+    formType: document.getElementById("formType").value,
+    values: {},
+    output: document.getElementById("generatedText")
+      ? document.getElementById("generatedText").value
+      : ""
+  };
+
+  document.querySelectorAll(".persist").forEach(function(el) {
+    state.values[el.id] = el.value;
   });
-  showSelectedForm();
-  updateProviderFields(false);
-  if(state.output){
+
+  localStorage.setItem(
+    stateKey,
+    JSON.stringify(state)
+  );
+}
+
+function restoreFormState() {
+  const state = JSON.parse(
+    localStorage.getItem(stateKey) || "null"
+  );
+
+  if (!state) {
+    return;
+  }
+
+  document.getElementById("formType").value =
+    state.formType || "";
+
+  Object.keys(state.values || {}).forEach(function(id) {
+    const el = document.getElementById(id);
+
+    if (el) {
+      el.value = state.values[id];
+    }
+  });
+
+  showSelectedForm(false);
+  loadCritSpecificResOptions(false);
+  loadProviderSpecificResOptions(false);
+
+  if (state.output) {
     showOutput(state.output);
   }
 }
 
-function showSelectedForm(){
-  const type=document.getElementById("formType").value;
-  document.querySelectorAll(".section").forEach(section=>section.style.display="none");
-  if(type)document.getElementById(type).style.display="block";
-  saveFormState();
-}
+function showSelectedForm(shouldSave = true) {
+  const type = document.getElementById("formType").value;
 
-function addCrit(value){
-  if(!value)return;
-  const resolution=document.getElementById("c_res");
-  resolution.value=resolution.value?resolution.value+" // "+value:value;
-  document.getElementById("c_quick").selectedIndex=0;
-  saveFormState();
-}
+  document
+    .getElementById("critSection")
+    .classList
+    .remove("active");
 
-function updateProviderFields(writeResolution=true){
-  const mode=document.getElementById("p_quick").value;
-  const transfer=document.getElementById("providerTransferFields");
-  transfer.style.display=mode==="xfer"?"block":"none";
+  document
+    .getElementById("providerSection")
+    .classList
+    .remove("active");
 
-  if(!writeResolution)return;
+  document
+    .getElementById("calSection")
+    .classList
+    .remove("active");
 
-  const rx=document.getElementById("p_rx").value.trim();
-  const reason=document.getElementById("p_xfer_reason").value;
-  const to=document.getElementById("p_xfer_to").value.trim();
-  const resolution=document.getElementById("p_res");
-
-  if(mode==="verbal"){
-    resolution.value=`called to request a verbal pa for ${rx} // pega intake #`;
-  }else if(mode==="xfer"){
-    resolution.value=`called to check status on ${reason} // advised pa intake line // xferred to ${to}`;
+  if (type === "crit") {
+    document
+      .getElementById("critSection")
+      .classList
+      .add("active");
   }
-  saveFormState();
+
+  if (type === "provider") {
+    document
+      .getElementById("providerSection")
+      .classList
+      .add("active");
+  }
+
+  if (type === "cal") {
+    document
+      .getElementById("calSection")
+      .classList
+      .add("active");
+  }
+
+  if (shouldSave) {
+    saveFormState();
+  }
 }
 
-function showOutput(text){
-  document.getElementById("output").innerHTML=`
-    <textarea id="generatedText" readonly onclick="this.select()"></textarea>
-    <div class="buttons"><button onclick="copyOutput()">copy</button></div>
-  `;
-  document.getElementById("generatedText").value=text;
+function loadCritSpecificResOptions(shouldSave = true) {
+  const type = document.getElementById("c_res_type").value;
+  const specific = document.getElementById("c_res_specific");
+  const currentValue = specific.value;
+
+  specific.innerHTML =
+    '<option value="">-- select specific res --</option>';
+
+  if (type && critResOptions[type]) {
+    critResOptions[type].forEach(function(option) {
+      const opt = document.createElement("option");
+      opt.value = option.text;
+      opt.textContent = option.label;
+      specific.appendChild(opt);
+    });
+  }
+
+  if (currentValue) {
+    specific.value = currentValue;
+  }
+
+  if (shouldSave) {
+    saveFormState();
+  }
 }
 
-function generate(){
-  const type=document.getElementById("formType").value;
-  if(!type){
-    showStatus("please select crit or provider.");
+function loadProviderSpecificResOptions(shouldSave = true) {
+  const type = document.getElementById("p_res_type").value;
+  const specific = document.getElementById("p_res_specific");
+  const currentValue = specific.value;
+
+  specific.innerHTML =
+    '<option value="">-- select specific res --</option>';
+
+  if (type && providerResOptions[type]) {
+    providerResOptions[type].forEach(function(option) {
+      const opt = document.createElement("option");
+      opt.value = option.text;
+      opt.textContent = option.label;
+      specific.appendChild(opt);
+    });
+  }
+
+  if (currentValue) {
+    specific.value = currentValue;
+  }
+
+  if (shouldSave) {
+    saveFormState();
+  }
+}
+
+function addCritResolution() {
+  const selectedText =
+    document.getElementById("c_res_specific").value;
+
+  if (!selectedText) {
+    saveFormState();
     return;
   }
 
-  let fullOutput="";
-  let logEntry;
+  const resBox = document.getElementById("c_res");
 
-  if(type==="crit"){
-    const agentId=document.getElementById("c_id").value.trim();
-    const memberPa=document.getElementById("c_mbr_pa").value.trim();
-    const rx=document.getElementById("c_rx").value.trim();
-    const resolution=document.getElementById("c_res").value.trim();
-    fullOutput=`${agentId} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
-    logEntry={id:crypto.randomUUID?.()||String(Date.now()),dateTime:new Date().toLocaleString().toLowerCase(),type:"crit",agentId,memberPa,actionResolution:resolution};
-  }else{
-    const name=document.getElementById("p_name").value.trim();
-    const title=document.getElementById("p_title").value.trim();
-    const memberPa=document.getElementById("p_mbr_pa").value.trim();
-    const rx=document.getElementById("p_rx").value.trim();
-    const resolution=document.getElementById("p_res").value.trim();
-    const mode=document.getElementById("p_quick").value==="xfer"?"xfer":"provider";
-    fullOutput=`${name} // ${title} // ${rx} // ${resolution} // drp crit prime 866.202.3474`;
-    logEntry={id:crypto.randomUUID?.()||String(Date.now()),dateTime:new Date().toLocaleString().toLowerCase(),type:mode,agentId:name,memberPa,actionResolution:resolution};
+  resBox.value = joinParts([
+    resBox.value,
+    selectedText
+  ]);
+
+  document.getElementById("c_res_specific").value = "";
+
+  saveFormState();
+}
+
+function addProviderResolution() {
+  let selectedText =
+    document.getElementById("p_res_specific").value;
+
+  selectedText = replaceProviderTokens(selectedText);
+
+  if (!selectedText) {
+    saveFormState();
+    return;
   }
 
-  showOutput(fullOutput);
+  const resBox = document.getElementById("p_res");
+
+  resBox.value = joinParts([
+    resBox.value,
+    selectedText
+  ]);
+
+  document.getElementById("p_res_specific").value = "";
+
+  saveFormState();
+}
+
+function createNote() {
+  const type = document.getElementById("formType").value;
+
+  if (!type) {
+    showStatus("please select crit, provider, or cal");
+    return;
+  }
+
+  let fullOutput = "";
+  let logEntry = null;
+
+  if (type === "crit") {
+    const agentId =
+      document.getElementById("c_id").value.trim();
+
+    const memberPa =
+      document.getElementById("c_mbr_pa").value.trim();
+
+    const rx =
+      document.getElementById("c_rx").value.trim();
+
+    const resolution =
+      document.getElementById("c_res").value.trim();
+
+    fullOutput = joinParts([
+      agentId,
+      rx,
+      resolution,
+      "drp crit prime 866.202.3474"
+    ]);
+
+    logEntry = {
+      id: makeId(),
+      dateTime: new Date().toLocaleString().toLowerCase(),
+      type: "crit",
+      agentId: agentId,
+      memberPa: memberPa,
+      actionResolution: resolution
+    };
+
+    showOutput(fullOutput);
+  }
+
+  if (type === "provider") {
+    const name =
+      document.getElementById("p_name").value.trim();
+
+    const title =
+      document.getElementById("p_title").value.trim();
+
+    const memberPa =
+      document.getElementById("p_mbr_pa").value.trim();
+
+    const rx =
+      document.getElementById("p_rx").value.trim();
+
+    const resolution =
+      document.getElementById("p_res").value.trim();
+
+    fullOutput = joinParts([
+      name,
+      title,
+      rx,
+      resolution,
+      "drp crit prime 866.202.3474"
+    ]);
+
+    logEntry = {
+      id: makeId(),
+      dateTime: new Date().toLocaleString().toLowerCase(),
+      type: "provider",
+      agentId: name,
+      memberPa: memberPa,
+      actionResolution: resolution
+    };
+
+    showOutput(fullOutput);
+  }
+
+  if (type === "cal") {
+    const agentId =
+      document.getElementById("cal_id").value.trim();
+
+    const pa =
+      document.getElementById("cal_pa").value.trim();
+
+    const resolution =
+      document.getElementById("cal_res").value.trim();
+
+    logEntry = {
+      id: makeId(),
+      dateTime: new Date().toLocaleString().toLowerCase(),
+      type: "cal",
+      agentId: agentId,
+      memberPa: pa,
+      actionResolution: resolution
+    };
+
+    clearOutput();
+  }
+
   activityLog.unshift(logEntry);
   saveLog();
-  updateLogCount();
+  renderLog();
+
   saveFormState();
   showStatus("added");
 }
 
-async function copyOutput(){
-  const area=document.getElementById("generatedText");
-  if(!area)return;
-  try{await navigator.clipboard.writeText(area.value);}
-  catch{area.select();document.execCommand("copy");}
-  showStatus("note copied");
+function showOutput(text) {
+  document.getElementById("output").innerHTML = `
+    <textarea id="generatedText" readonly onclick="this.select()"></textarea>
+
+    <div class="buttons">
+      <button onclick="copyOutput()">copy</button>
+    </div>
+  `;
+
+  document.getElementById("generatedText").value = text;
 }
 
-function clearOutput(){
-  document.getElementById("output").innerHTML="";
+async function copyOutput() {
+  const textarea = document.getElementById("generatedText");
+
+  if (!textarea) {
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(textarea.value);
+  } catch (error) {
+    textarea.select();
+    document.execCommand("copy");
+  }
+
+  showStatus("copied");
+}
+
+function clearOutput() {
+  document.getElementById("output").innerHTML = "";
   saveFormState();
 }
 
-function resetForm(){
-  document.getElementById("formType").value="";
-  document.querySelectorAll(".persist").forEach(el=>{
-    if(el.tagName==="SELECT")el.selectedIndex=0;else el.value="";
+function resetForm() {
+  if (!confirm("reset current form?")) {
+    return;
+  }
+
+  document.getElementById("formType").value = "";
+
+  document.querySelectorAll(".persist").forEach(function(el) {
+    if (el.tagName === "SELECT") {
+      el.selectedIndex = 0;
+    } else {
+      el.value = "";
+    }
   });
-  document.querySelectorAll(".section").forEach(section=>section.style.display="none");
-  document.getElementById("providerTransferFields").style.display="none";
-  document.getElementById("output").innerHTML="";
+
+  document
+    .getElementById("critSection")
+    .classList
+    .remove("active");
+
+  document
+    .getElementById("providerSection")
+    .classList
+    .remove("active");
+
+  document
+    .getElementById("calSection")
+    .classList
+    .remove("active");
+
+  document.getElementById("c_res_specific").innerHTML =
+    '<option value="">-- select specific res --</option>';
+
+  document.getElementById("p_res_specific").innerHTML =
+    '<option value="">-- select specific res --</option>';
+
+  document.getElementById("output").innerHTML = "";
+
   localStorage.removeItem(stateKey);
+
   showStatus("reset");
 }
 
-function showStatus(message){
-  const status=document.getElementById("saveStatus");
-  status.textContent=message;
-  setTimeout(()=>status.textContent="",2500);
+function makeId() {
+  return (
+    Date.now().toString() +
+    Math.random().toString(16).slice(2)
+  );
 }
 
-function saveLog(){localStorage.setItem(logKey,JSON.stringify(activityLog));}
-function updateLogCount(){
-  const count=activityLog.length;
-  document.getElementById("logCount").textContent=count===1?"1 saved entry":count+" saved entries";
+function saveLog() {
+  localStorage.setItem(
+    logKey,
+    JSON.stringify(activityLog)
+  );
 }
-function clearLog(){
-  if(!activityLog.length)return alert("there are no saved entries.");
-  if(!confirm("are you sure you want to clear the entire activity log?"))return;
-  activityLog=[];
+
+function loadLog() {
+  try {
+    activityLog =
+      JSON.parse(localStorage.getItem(logKey)) || [];
+  } catch (error) {
+    activityLog = [];
+  }
+}
+
+function renderLog() {
+  document.getElementById("logCount").textContent =
+    activityLog.length === 1
+      ? "1 saved entry"
+      : activityLog.length + " saved entries";
+
+  const area = document.getElementById("logArea");
+
+  if (!activityLog.length) {
+    area.innerHTML =
+      '<div class="empty">no saved entries</div>';
+    return;
+  }
+
+  const rows = activityLog.map(function(entry) {
+    return `
+      <tr>
+        <td>${escapeHTML(entry.dateTime)}</td>
+        <td>${escapeHTML(entry.type)}</td>
+        <td>${escapeHTML(entry.agentId)}</td>
+        <td>${escapeHTML(entry.memberPa)}</td>
+        <td>${escapeHTML(entry.actionResolution)}</td>
+        <td class="actions">
+          <button class="small" onclick="deleteLogEntry('${entry.id}')">delete</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  area.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>date/time</th>
+          <th>type</th>
+          <th>agt id</th>
+          <th>mbr id/pa#</th>
+          <th>action/res</th>
+          <th>actions</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function viewLog() {
+  renderLog();
+  showStatus("log shown");
+}
+
+function deleteLogEntry(id) {
+  if (!confirm("delete this entry?")) {
+    return;
+  }
+
+  activityLog = activityLog.filter(function(entry) {
+    return entry.id !== id;
+  });
+
+  saveLog();
+  renderLog();
+  showStatus("entry deleted");
+}
+
+function clearLog() {
+  if (!activityLog.length) {
+    alert("there are no saved entries.");
+    return;
+  }
+
+  if (!confirm("clear entire activity log?")) {
+    return;
+  }
+
+  activityLog = [];
   localStorage.removeItem(logKey);
-  updateLogCount();
+  renderLog();
   showStatus("activity log cleared");
 }
-function deleteLogEntry(id){
-  activityLog=activityLog.filter(entry=>entry.id!==id);
-  saveLog();
-  updateLogCount();
+
+function popCSV() {
+  if (!activityLog.length) {
+    alert("there are no saved entries to download.");
+    return;
+  }
+
+  const rows = [
+    ["date/time","type","agt id","mbr id/pa#","action/res"]
+  ];
+
+  activityLog.forEach(function(entry) {
+    rows.push([
+      entry.dateTime,
+      entry.type,
+      entry.agentId,
+      entry.memberPa,
+      entry.actionResolution
+    ]);
+  });
+
+  const csv = rows
+    .map(function(row) {
+      return row
+        .map(csvEscape)
+        .join(",");
+    })
+    .join("\n");
+
+  const blob = new Blob(
+    ["\uFEFF" + csv],
+    {type:"text/csv;charset=utf-8;"}
+  );
+
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+
+  link.href = url;
+  link.download =
+    "critter-activity-log-" +
+    new Date().toISOString().split("T")[0] +
+    ".csv";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+
+  showStatus("csv downloaded");
 }
-function escapeHTML(value){
-  const div=document.createElement("div");
-  div.textContent=value||"";
+
+function csvEscape(value) {
+  return (
+    '"' +
+    String(value || "").replace(/"/g,'""') +
+    '"'
+  );
+}
+
+function escapeHTML(value) {
+  const div = document.createElement("div");
+  div.textContent = value || "";
   return div.innerHTML;
 }
-function showActivityLog(){
-  if(!activityLog.length)return alert("there are no saved entries.");
-  const w=window.open("","critterActivityLogWindow");
-  if(!w)return alert("please allow pop-ups to view the activity log.");
 
-  const rows=activityLog.map(entry=>`
-    <tr>
-      <td>${escapeHTML(entry.dateTime)}</td>
-      <td>${escapeHTML(entry.type)}</td>
-      <td>${escapeHTML(entry.agentId)}</td>
-      <td>${escapeHTML(entry.memberPa)}</td>
-      <td>${escapeHTML(entry.actionResolution)}</td>
-      <td><button onclick="window.opener.deleteLogEntry('${entry.id}');this.closest('tr').remove()">delete</button></td>
-    </tr>
-  `).join("");
+function showStatus(message) {
+  const status = document.getElementById("statusMessage");
 
-  w.document.write(`<!DOCTYPE html><html><head><title>activity log</title>
-  <style>
-  body{background:#050505;color:#fff;font-family:Century Gothic,Arial,sans-serif;padding:20px}
-  h2{color:#c99a24;text-align:center}
-  table{width:100%;border-collapse:collapse}
-  th,td{border:1px solid #655522;padding:9px;text-align:left}
-  th{color:#ffd84d;background:#211c0d}
-  td{background:#111}
-  button{background:#8f6814;color:#fff;border:0;border-radius:5px;padding:6px 10px}
-  </style></head><body><h2>activity log</h2><table>
-  <thead><tr><th>date/time</th><th>type</th><th>agt id</th><th>mbr id/pa#</th><th>action/res</th><th>delete</th></tr></thead>
-  <tbody>${rows}</tbody></table></body></html>`);
-  w.document.close();
-}
-function csvEscape(value){return '"'+String(value||"").replace(/"/g,'""')+'"';}
-function downloadCSV(){
-  if(!activityLog.length)return alert("there are no saved entries to download.");
-  const rows=[["date/time","type","agt id","mbr id/pa#","action/res"],...activityLog.map(e=>[e.dateTime,e.type,e.agentId,e.memberPa,e.actionResolution])];
-  const csv=rows.map(row=>row.map(csvEscape).join(",")).join("\n");
-  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
-  const link=document.createElement("a");
-  link.href=URL.createObjectURL(blob);
-  link.download="critter-activity-log-"+new Date().toISOString().split("T")[0]+".csv";
-  link.click();
-  URL.revokeObjectURL(link.href);
+  status.textContent = message;
+
+  setTimeout(function() {
+    status.textContent = "";
+  }, 2500);
 }
 
-document.addEventListener("DOMContentLoaded",function(){
-  try{activityLog=JSON.parse(localStorage.getItem(logKey))||[];}catch{activityLog=[];}
-  updateLogCount();
+document.addEventListener("DOMContentLoaded",function() {
+  loadLog();
+  renderLog();
   restoreFormState();
 
-  document.getElementById("formType").addEventListener("change",showSelectedForm);
-  document.getElementById("c_quick").addEventListener("change",function(){addCrit(this.value);});
-  document.getElementById("p_quick").addEventListener("change",function(){updateProviderFields(true);});
-  document.getElementById("p_rx").addEventListener("input",function(){if(document.getElementById("p_quick").value==="verbal")updateProviderFields(true);});
-  document.getElementById("p_xfer_reason").addEventListener("change",function(){updateProviderFields(true);});
-  document.getElementById("p_xfer_to").addEventListener("input",function(){updateProviderFields(true);});
-  document.querySelectorAll(".persist").forEach(el=>{
+  document
+    .getElementById("formType")
+    .addEventListener("change",function() {
+      showSelectedForm(true);
+    });
+
+  document
+    .getElementById("c_res_type")
+    .addEventListener("change",function() {
+      loadCritSpecificResOptions(true);
+    });
+
+  document
+    .getElementById("c_res_specific")
+    .addEventListener("change",addCritResolution);
+
+  document
+    .getElementById("p_res_type")
+    .addEventListener("change",function() {
+      loadProviderSpecificResOptions(true);
+    });
+
+  document
+    .getElementById("p_res_specific")
+    .addEventListener("change",addProviderResolution);
+
+  document.querySelectorAll(".persist").forEach(function(el) {
     el.addEventListener("input",saveFormState);
     el.addEventListener("change",saveFormState);
   });
 });
 </script>
+
 </body>
 </html>
