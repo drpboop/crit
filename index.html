@@ -384,6 +384,7 @@ const critResOptions = {
     {label:"high dollar",text:"updated pa detailing on file for high dollar on approved medication"},
     {label:"backdated",text:"backdated to mm/dd/yyyy per request"},
     {label:"missing pa",text:"added pa as it was not added when case was approved"},
+    {label:"addt info",text:"called in regard to outreach . added ai to pending case"},
     {label:"rx restrictions",text:"updated rx restrictions and claims paid"},
     {label:"extended loading",text:"extended loading dose pa by 2 weeks per pharmacy request"}
   ],
@@ -395,11 +396,11 @@ const critResOptions = {
   "transfer": [
     {label:"same plan transfer",text:"transferred from previous account same type of plan and um review"},
     {label:"not transferable",text:"pa cannot be transferred . new pa required"},
-    {label:"xfer",text:"xfer to correct lob"}
   ],
   "call": [
     {label:"denial call",text:"called to go over denial . reviewed next steps"},
     {label:"approval call",text:"called to go over approval . provided approval information"},
+    {label:"xfer to correct lob",text:"xfer to correct lob"},
     {label:"ssa redirect",text:"advised clinical review cannot assist . referred to ssa"}
   ],
   "other": [
@@ -545,7 +546,7 @@ function addProviderResolution() {
   saveFormState();
 }
 
-function createNote() {
+async function createNote() {
   const type = document.getElementById("formType").value;
   if (!type) {
     showStatus("please select crit, provider, or cal");
@@ -600,6 +601,7 @@ function createNote() {
     const agentId = document.getElementById("cal_id").value.trim();
     const pa = document.getElementById("cal_pa").value.trim();
     const resolution = document.getElementById("cal_res").value.trim();
+    fullOutput = resolution;
 
     logEntry = {
       id: makeId(),
@@ -617,7 +619,8 @@ function createNote() {
   saveLog();
   renderLog();
   saveFormState();
-  showStatus("added");
+  const copied = fullOutput ? await copyText(fullOutput) : false;
+  showStatus(copied ? "added and copied" : "added");
 }
 
 function showOutput(text) {
@@ -628,18 +631,28 @@ function showOutput(text) {
   document.getElementById("generatedText").value = text;
 }
 
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (error) {
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.appendChild(helper);
+    helper.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(helper);
+    return copied;
+  }
+}
+
 async function copyOutput() {
   const textarea = document.getElementById("generatedText");
   if (!textarea) return;
-
-  try {
-    await navigator.clipboard.writeText(textarea.value);
-  } catch (error) {
-    textarea.select();
-    document.execCommand("copy");
-  }
-
-  showStatus("copied");
+  const copied = await copyText(textarea.value);
+  showStatus(copied ? "copied" : "copy failed");
 }
 
 function clearOutput() {
@@ -648,8 +661,6 @@ function clearOutput() {
 }
 
 function resetForm() {
-  if (!confirm("reset current form?")) return;
-
   document.getElementById("formType").value = "";
 
   document.querySelectorAll(".persist").forEach(function(el) {
