@@ -354,10 +354,6 @@ td.actions{
     <button onclick="popCSV()">pop</button>
     <button class="danger" onclick="clearLog()">clear log</button>
   </div>
-
-  <div id="logArea" class="table-wrap">
-    <div class="empty">no saved entries</div>
-  </div>
 </section>
 
 <section class="date-card">
@@ -699,47 +695,10 @@ function loadLog() {
 function renderLog() {
   document.getElementById("logCount").textContent =
     activityLog.length === 1 ? "1 saved entry" : activityLog.length + " saved entries";
-
-  const area = document.getElementById("logArea");
-
-  if (!activityLog.length) {
-    area.innerHTML = '<div class="empty">no saved entries</div>';
-    return;
-  }
-
-  const rows = activityLog.map(function(entry) {
-    return `
-      <tr>
-        <td>${escapeHTML(entry.dateTime)}</td>
-        <td>${escapeHTML(entry.type)}</td>
-        <td>${escapeHTML(entry.agentId)}</td>
-        <td>${escapeHTML(entry.memberPa)}</td>
-        <td>${escapeHTML(entry.actionResolution)}</td>
-        <td class="actions"><button class="small" onclick="deleteLogEntry('${entry.id}')">delete</button></td>
-      </tr>
-    `;
-  }).join("");
-
-  area.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>date/time</th>
-          <th>type</th>
-          <th>agt id</th>
-          <th>mbr id/pa#</th>
-          <th>action/res</th>
-          <th>actions</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
 }
 
 function viewLog() {
-  renderLog();
-  showStatus("log shown");
+  window.location.href = "activity-log.html";
 }
 
 function deleteLogEntry(id) {
