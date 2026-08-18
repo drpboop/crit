@@ -665,6 +665,13 @@ async function copyOutput() {
 
 function clearOutput() {
   document.getElementById("output").innerHTML = "";
+  const resolutionFields = {
+    crit: "c_res",
+    provider: "p_res",
+    cal: "cal_res"
+  };
+  const fieldId = resolutionFields[document.getElementById("formType").value];
+  if (fieldId) document.getElementById(fieldId).value = "";
   saveFormState();
 }
 
